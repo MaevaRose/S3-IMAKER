@@ -6,7 +6,9 @@ using namespace glimac;
 
 int main(int argc, char** argv) {
     // Initialize SDL and open a window
-    SDLWindowManager windowManager(800, 600, "GLImac");
+    const int WINDOW_HEIGHT = 1200;
+    const int WINDOW_WIDTH = 1200;
+    SDLWindowManager windowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "IMAKER - DURAND - ROSENBERG");
 
     // Initialize glew for OpenGL3+ support
     GLenum glewInitError = glewInit();
@@ -19,7 +21,7 @@ int main(int argc, char** argv) {
     std::cout << "GLEW Version : " << glewGetString(GLEW_VERSION) << std::endl;
 
     /*********************************
-     * HERE SHOULD COME THE INITIALIZATION CODE
+     * INITIALIZATION CODE
      *********************************/
 
     // Application loop:
@@ -31,10 +33,16 @@ int main(int argc, char** argv) {
             if(e.type == SDL_QUIT) {
                 done = true; // Leave the loop after this iteration
             }
+            if( e.type == SDL_KEYDOWN && (e.key.keysym.sym == SDLK_q || e.key.keysym.sym == SDLK_ESCAPE))
+            {
+                done = true;
+                break;
+            }
         }
 
+
         /*********************************
-         * HERE SHOULD COME THE RENDERING CODE
+         * RENDERING CODE
          *********************************/
 
         // Update the display
