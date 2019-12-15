@@ -50,6 +50,7 @@ namespace cubeData {
                                 0.1f, // near et
                               100.f); //far définissent une range de vision sur l'axe de la profondeur
 
+    //calcul MVMatrix /!\ inutile si TrackBallCamera
     glm::mat4 MVMatrix = glm::translate(glm::mat4(), glm::vec3(0, 0, -5));
 
 
@@ -59,7 +60,7 @@ namespace cubeData {
 
 namespace Imaker{
 
-  Cube::Cube() :  m_vao(0), m_ibo(0) {
+  Cube::Cube() :  m_vao(0), m_ibo(0), visible(true), position(glm::vec3 (0, 0, 0)) {
     /*********************************
      * VBO
      *********************************/
@@ -114,43 +115,102 @@ namespace Imaker{
     glBindVertexArray(0);
 
 
+
+  }
+
+
+
+
+  Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(true), position(vecPosition) {
     /*********************************
-    * Uniforms
+     * VBO
+     *********************************/
+
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData::positions), cubeData::positions, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+    /*********************************
+     * IBO
+     *********************************/
+     //GLuint m_ibo;
+     glGenBuffers(1, &m_ibo);
+
+     //binder du GL_ELEMENT_ARRAY_BUFFER réservé pour les ibo
+     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+
+     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeData::indices), cubeData::indices, GL_STATIC_DRAW);
+
+     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    /*********************************
+    * VAO
     *********************************/
+    //GLuint vao;
+
+    glGenVertexArrays(1, &m_vao);
+    glBindVertexArray(m_vao);
+
+    const GLuint VERTEX_ATTR_POSITION = 0;
+    const GLuint VERTEX_ATTR_NORMAL = 1;
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo); // on binde le vbo
+    // Vertex input description
+
+    glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
+    glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE,
+      3 * sizeof(float), 0);
+
+    glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
+    glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE,
+      3 * sizeof(float), 0);
+
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
 
 
   }
+
+
+
+
 
   Cube::~Cube() {
 
   }
 
+
+
+
+
   void Cube::drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
-
-    // glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), //angle vertical de vue
-    //                               1.f, // ratio largeur/hauteur de la fenêtre
-    //                             0.1f, // near et
-    //                           100.f); //far définissent une range de vision sur l'axe de la profondeur
-    //
-    // glm::mat4 MVMatrix = glm::translate(glm::mat4(), glm::vec3(0, 0, -5));
-    //
-    //
-    // //calcul NormalMatrix avec NormalMatrix=(MV^−1)^T,
-    // glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-
     glBindVertexArray(m_vao);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
 
-    glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(globalMVMatrix));
-    glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * globalMVMatrix));
+    glm::mat4 cubeMVMatrix = glm::translate(globalMVMatrix, position);
+
+    glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeMVMatrix));
+    glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * cubeMVMatrix));
     glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::NormalMatrix));
 
     glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
-    //glDrawArrays(GL_TRIANGLES, 0, 12*3);
+
 
     glBindVertexArray(0);
   }
+
+
+
+
 
 
 
@@ -166,9 +226,32 @@ namespace Imaker{
     glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::NormalMatrix));
 
     glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
-    //glDrawArrays(GL_TRIANGLES, 0, 12*3);
 
     glBindVertexArray(0);
+  }
+
+
+
+  bool Cube::isVisible(){
+    return visible;
+  }
+
+
+
+  void Cube::fillCube(){
+    if(!visible){
+      visible = true;
+    }
+    else std::cout << "Un cube existe déjà à cet emplacement" << std::endl;
+  }
+
+
+  void Cube::deleteCube(){
+    if (visible){
+      visible = false;
+      //glDrawElements(GL_TRIANGLES, 0, GL_UNSIGNED_SHORT, (void*) 0);
+    }
+    else std::cout << "Aucun cube à supprimer" << std::endl;
   }
 
 } //namespace

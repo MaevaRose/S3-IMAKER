@@ -67,6 +67,7 @@ int main(int argc, char** argv) {
      TrackBallCamera camera;
      //déclaration du cube
      Cube cube;
+     Cube cube2(glm::vec3(2, 0, 0));
 
     // Application loop:
     bool done = false;
@@ -104,6 +105,18 @@ int main(int argc, char** argv) {
          }
          break;
 
+      case SDL_KEYUP:
+        {
+          if(e.key.keysym.sym == SDLK_c){
+           cube.fillCube();
+           e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_d){
+            cube.deleteCube();
+            e.type = 0;
+          }
+        }
+        break;
 
        case SDL_MOUSEMOTION:
          {
@@ -131,7 +144,15 @@ int main(int argc, char** argv) {
          globalMVMatrix = camera.getViewMatrix();
 
          //bool lol = cube->isEmpty();
-         cube.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         if(cube.isVisible()){
+            cube.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         }
+         if(cube2.isVisible()){
+            cube2.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         }
+
+
+
          //cube.drawCubeRotative(windowManager.getTime(), uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
 
         // Update the display
