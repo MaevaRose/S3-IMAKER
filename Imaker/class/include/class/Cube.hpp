@@ -13,7 +13,7 @@ namespace Imaker{
       Cube();
       ~Cube();
 
-      void drawCube(GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
+      void drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
       void drawCubeRotative(float time, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
       glm::vec3 returnPos();
       bool isEmpty();

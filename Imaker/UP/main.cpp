@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <glimac/Program.hpp>
 #include <glimac/FilePath.hpp>
+#include <glimac/TrackBallCamera.hpp>
 #include <iostream>
 #include <class/Cube.hpp>
 
@@ -83,15 +84,55 @@ int main(int argc, char** argv) {
             }
         }
 
+      switch(e.type) {
+
+         /* Touche clavier */
+       case SDL_KEYDOWN:
+         {
+           float zoom = 0.01f;
+           if (e.key.keysym.sym == SDLK_z
+               || e.key.keysym.sym == SDLK_UP) {
+             //std::cout << "Z or UP pressed" << std::endl;
+             camera.moveFront(zoom);
+           }
+           else if (e.key.keysym.sym == SDLK_s
+                      || e.key.keysym.sym == SDLK_DOWN) {
+             //std::cout << "S or DOWN pressed" << std::endl;
+             camera.moveFront(-zoom);
+           }
+
+         }
+         break;
+
+
+       case SDL_MOUSEMOTION:
+         {
+           float speed = 0.01f;
+           //std::cout << "Mouse move: ";
+           //std::cout << e.motion.xrel << " | " << e.motion.yrel << std::endl;
+           if ( e.motion.xrel != 0 ) {
+             camera.rotateUp( float(e.motion.xrel) * speed);
+           }
+           if ( e.motion.yrel != 0 ) {
+             camera.rotateLeft( float(e.motion.yrel) * speed);
+           }
+
+         }
+         break;
+
+       default:
+           break;
+     }
 
         /*********************************
          * RENDERING CODE
          *********************************/
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+         globalMVMatrix = camera.getViewMatrix();
 
          //bool lol = cube->isEmpty();
-         //cube.drawCube(uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
-         cube.drawCubeRotative(windowManager.getTime(), uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         cube.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         //cube.drawCubeRotative(windowManager.getTime(), uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
 
         // Update the display
         windowManager.swapBuffers();

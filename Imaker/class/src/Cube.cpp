@@ -125,7 +125,7 @@ namespace Imaker{
 
   }
 
-  void Cube::drawCube(GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
+  void Cube::drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
 
     // glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), //angle vertical de vue
     //                               1.f, // ratio largeur/hauteur de la fenêtre
@@ -142,8 +142,8 @@ namespace Imaker{
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
 
-    glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::MVMatrix));
-    glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * cubeData::MVMatrix));
+    glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(globalMVMatrix));
+    glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * globalMVMatrix));
     glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::NormalMatrix));
 
     glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
