@@ -91,12 +91,24 @@ namespace Imaker{
     * VAO
     *********************************/
     //GLuint vao;
+
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
+
+    const GLuint VERTEX_ATTR_POSITION = 0;
+    const GLuint VERTEX_ATTR_NORMAL = 1;
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo); // on binde le vbo
     // Vertex input description
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+
+    glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
+    glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE,
+      3 * sizeof(float), 0);
+
+    glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
+    glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE,
+      3 * sizeof(float), 0);
+
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -115,27 +127,46 @@ namespace Imaker{
 
   void Cube::drawCube(GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
 
-    glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), //angle vertical de vue
-                                  1.f, // ratio largeur/hauteur de la fenêtre
-                                0.1f, // near et
-                              100.f); //far définissent une range de vision sur l'axe de la profondeur
+    // glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), //angle vertical de vue
+    //                               1.f, // ratio largeur/hauteur de la fenêtre
+    //                             0.1f, // near et
+    //                           100.f); //far définissent une range de vision sur l'axe de la profondeur
+    //
+    // glm::mat4 MVMatrix = glm::translate(glm::mat4(), glm::vec3(0, 0, -5));
+    //
+    //
+    // //calcul NormalMatrix avec NormalMatrix=(MV^−1)^T,
+    // glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
-    glm::mat4 MVMatrix = glm::translate(glm::mat4(), glm::vec3(0, 0, -5));
+    glBindVertexArray(m_vao);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+
+    glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::MVMatrix));
+    glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * cubeData::MVMatrix));
+    glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::NormalMatrix));
+
+    glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
+    //glDrawArrays(GL_TRIANGLES, 0, 12*3);
+
+    glBindVertexArray(0);
+  }
 
 
-    //calcul NormalMatrix avec NormalMatrix=(MV^−1)^T,
-    glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+
+  void Cube::drawCubeRotative(float time, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
+    glm::mat4 MVMatrix = glm::rotate(cubeData::MVMatrix, time, glm::vec3(0.f, 1.f, 0.f));
 
     glBindVertexArray(m_vao);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
 
     glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-    glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-    glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+    glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * MVMatrix));
+    glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::NormalMatrix));
 
-    //glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
-    glDrawArrays(GL_TRIANGLES, 0, 12*3);
+    glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
+    //glDrawArrays(GL_TRIANGLES, 0, 12*3);
 
     glBindVertexArray(0);
   }

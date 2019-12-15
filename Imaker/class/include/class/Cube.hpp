@@ -14,6 +14,7 @@ namespace Imaker{
       ~Cube();
 
       void drawCube(GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
+      void drawCubeRotative(float time, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
       glm::vec3 returnPos();
       bool isEmpty();
       void fillCube();

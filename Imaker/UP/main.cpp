@@ -48,9 +48,7 @@ int main(int argc, char** argv) {
      glEnable(GL_DEPTH_TEST);
 
      //variables matricielles
-     glm::mat4 ProjMatrix;
-     glm::mat4 MVMatrix;
-     glm::mat4 NormalMatrix;
+     glm::mat4 ProjMatrix, MVMatrix, NormalMatrix, globalMVMatrix;
 
      //calcul ProjMatrix
      ProjMatrix = glm::perspective(glm::radians(70.f), //angle vertical de vue
@@ -64,6 +62,8 @@ int main(int argc, char** argv) {
      //calcul NormalMatrix avec NormalMatrix=(MV^−1)^T,
      NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
+     /* Création de la camera */
+     TrackBallCamera camera;
      //déclaration du cube
      Cube cube;
 
@@ -90,7 +90,8 @@ int main(int argc, char** argv) {
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
          //bool lol = cube->isEmpty();
-         cube.drawCube(uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         //cube.drawCube(uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         cube.drawCubeRotative(windowManager.getTime(), uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
 
         // Update the display
         windowManager.swapBuffers();
