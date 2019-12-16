@@ -4,7 +4,7 @@
 
 
 World::World() height(100), width(100), length(100),  ground(0) {};
-World::World(int hei, int wid) : height(hei), width(wid), length(len) {};
+World::World(int hei, int wid, int len) : height(hei), width(wid), length(len) {};
 
 int World::getHeight() {
     return this -> height;

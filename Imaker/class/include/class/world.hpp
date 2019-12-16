@@ -7,12 +7,12 @@ class World {
 
     //constructor
     World();
-    World(int height, int width);
+    World(int height, int width, int len);
 
     //methodes
     int getHeight();
     int getWidth();
-    int get 
+    int getLength();
 
     void drawConstrutionArea();
 
@@ -21,6 +21,7 @@ class World {
     //attributs
     int height;
     int width;
+    int length;
     int ground; //POURQUOI ?
     std::vector<Cube> allCubes;  
 }
