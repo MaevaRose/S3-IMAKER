@@ -16,20 +16,20 @@ namespace Imaker{
 
       void drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc); // afficher un cube avec TrackBallCamera
       void drawCubeRotative(float time, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
-      glm::vec3 returnPos();
       bool isVisible();
       void fillCube();
       void deleteCube();
       void editColor();
+      void returnPos();
 
-    private :
+    protected :
       GLuint m_vao;
       GLuint m_ibo;
+      GLuint m_vbo;
 
       glm::vec3 position;
       glm::vec3 color;
       bool visible;
-
 
   };
 }

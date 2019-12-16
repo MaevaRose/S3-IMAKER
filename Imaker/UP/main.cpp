@@ -4,10 +4,97 @@
 #include <glimac/FilePath.hpp>
 #include <glimac/TrackBallCamera.hpp>
 #include <iostream>
-#include <class/Cube.hpp>
+#include <vector>
+#include <class/Cursor.hpp>
 
 using namespace glimac;
 using namespace Imaker;
+
+void createScene(std::vector<std::vector<std::vector<Cube>>> &allCubes){
+  for(int i = 0 ; i < 5 ; i++ ){
+    for(int j = 0 ; j < 5 ; j++){
+      for(int k = 0 ; k < 5 ; k++){
+        Cube temp_cube(glm::vec3(i,j,k));
+        allCubes[i][j][k] = temp_cube;
+      }
+    }
+  }
+}
+
+void drawScene(std::vector<std::vector<std::vector<Cube>>> allCubes, glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
+  for(int i = 0 ; i < 5 ; i++ ){
+    for(int j = 0 ; j < 5 ; j++){
+      for(int k = 0 ; k < 5 ; k++){
+        if(allCubes[i][j][k].isVisible()){
+          allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+        }
+      }
+    }
+  }
+}
+
+void cursorManager(SDL_Event e, Cursor cursor){
+//  switch(e.key.keysym.sym) {
+    std::cout<<"in cursorManager"<<std::endl;
+  //     case SDLK_KP_6 :
+  //       {
+  //         cursor.updatePosX(1);
+  //       }
+  //       break;
+  //     case SDLK_KP_4 :
+  //       {
+  //         cursor.updatePosX(-1);
+  //       }
+  //       break;
+  //     case SDLK_KP_8 :
+  //       {
+  //         cursor.updatePosY(1);
+  //       }
+  //       break;
+  //     case SDLK_KP_2 :
+  //       {
+  //         cursor.updatePosY(-1);
+  //       }
+  //       break;
+  //     case SDLK_KP_9 :
+  //       {
+  //         cursor.updatePosZ(1);
+  //       }
+  //       break;
+  //     case SDLK_KP_1 :
+  //     {
+  //       cursor.updatePosZ(-1);
+  //     }
+  //       break;
+  //     default :
+  //       break;
+  // }
+  if(e.key.keysym.sym == SDLK_KP_6){
+    cursor.updatePosX(1);
+    e.type = 0;
+  }
+  else if(e.key.keysym.sym == SDLK_KP_4){
+    cursor.updatePosX(-1);
+    e.type = 0;
+  }
+  else if(e.key.keysym.sym == SDLK_KP_8){
+    cursor.updatePosY(1);
+    e.type = 0;
+  }
+  else if(e.key.keysym.sym == SDLK_KP_2){
+    cursor.updatePosY(-1);
+    e.type = 0;
+  }
+  else if(e.key.keysym.sym == SDLK_KP_9){
+    cursor.updatePosZ(1);
+    e.type = 0;
+  }
+  else if(e.key.keysym.sym == SDLK_KP_1){
+    cursor.updatePosZ(-1);
+    e.type = 0;
+  }
+
+}
 
 int main(int argc, char** argv) {
     // Initialize SDL and open a window
@@ -66,8 +153,12 @@ int main(int argc, char** argv) {
      /* Création de la camera */
      TrackBallCamera camera;
      //déclaration du cube
-     Cube cube;
+    //Cube cube;
      Cube cube2(glm::vec3(2, 0, 0));
+     std::vector<std::vector<std::vector<Cube>>> allCubes(5,std::vector<std::vector<Cube> >(5,std::vector <Cube>(5)));
+     createScene(allCubes);
+     Cursor cursor;
+     glm::vec3 cursorPos;
 
     // Application loop:
     bool done = false;
@@ -106,13 +197,39 @@ int main(int argc, char** argv) {
          break;
 
       case SDL_KEYUP:
-        {
+        { //cursorManager(e, cursor);
           if(e.key.keysym.sym == SDLK_c){
-           cube.fillCube();
+           cursorPos = cursor.getCursorPos();
+           allCubes[cursorPos.x][cursorPos.y][cursorPos.z].fillCube();
            e.type = 0;
           }
-          else if(e.key.keysym.sym == SDLK_d){
-            cube.deleteCube();
+          else if(e.key.keysym.sym == SDLK_v){
+            cursorPos = cursor.getCursorPos();
+            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_KP_6){
+            cursor.updatePosX(1);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_KP_4){
+            cursor.updatePosX(-1);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_KP_8){
+            cursor.updatePosY(1);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_KP_2){
+            cursor.updatePosY(-1);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_KP_9){
+            cursor.updatePosZ(1);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_KP_1){
+            cursor.updatePosZ(-1);
             e.type = 0;
           }
         }
@@ -143,15 +260,22 @@ int main(int argc, char** argv) {
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
          globalMVMatrix = camera.getViewMatrix();
 
-         //bool lol = cube->isEmpty();
-         if(cube.isVisible()){
-            cube.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
-         }
-         if(cube2.isVisible()){
-            cube2.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
-         }
+         // //pour afficher le curseur toujours au dessus
+         // glClear(GL_DEPTH_BUFFER_BIT);
 
 
+         glDepthRange(0, 0.01);
+
+         cursor.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         //cursor.returnPos();
+
+          // reserve 99% of the back depth range for the 3D axis
+          glDepthRange(0.01, 1.0);
+
+         drawScene(allCubes, globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+
+          // restore depth range
+          glDepthRange(0, 1.0);
 
          //cube.drawCubeRotative(windowManager.getTime(), uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
 

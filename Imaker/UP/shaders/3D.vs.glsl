@@ -2,7 +2,7 @@
 
 layout(location = 0) in vec3 aVertexPosition;
 layout(location = 1) in vec3 aVertexNormal;
-//layout(location = 2) in vec2 aVertexTexCoords;
+layout(location = 2) in vec3 aCursorColor;
 
 //matrices de transformation
 uniform mat4 uMVPMatrix;
@@ -11,7 +11,7 @@ uniform mat4 uNormalMatrix;
 
 out vec3 vPosition_vs; // Position du sommet transformé dans l'espace View
 out vec3 vNormal_vs; // Normale du sommet transformé dans l'espace View
-//out vec2 vTexCoords; // Coordonnées de texture du sommet
+out vec3 vCursorColor; // Coordonnées de texture du sommet
 
 void main() {
 
@@ -23,7 +23,7 @@ void main() {
   //on calcule les valeurs de sortie
   vPosition_vs = vec3(uMVMatrix * vertexPosition);
   vNormal_vs = vec3(uNormalMatrix * vertexNormal);
-//  vTexCoords = aVertexTexCoords;
+  vCursorColor = vec3(1,0,0);
 
   gl_Position = uMVPMatrix * vertexPosition;
 }

@@ -44,6 +44,7 @@ namespace cubeData {
         20,21,22,  22,23,20		  // back
     };
 
+
     //calcul ProjMatrix
     glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), //angle vertical de vue
                                   1.f, // ratio largeur/hauteur de la fenêtre
@@ -60,15 +61,15 @@ namespace cubeData {
 
 namespace Imaker{
 
-  Cube::Cube() :  m_vao(0), m_ibo(0), visible(true), position(glm::vec3 (0, 0, 0)) {
+  Cube::Cube() : visible(true) {
     /*********************************
      * VBO
      *********************************/
 
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
+    GLuint m_vbo;
+    glGenBuffers(1, &m_vbo);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData::positions), cubeData::positions, GL_STATIC_DRAW);
 
@@ -99,7 +100,7 @@ namespace Imaker{
     const GLuint VERTEX_ATTR_POSITION = 0;
     const GLuint VERTEX_ATTR_NORMAL = 1;
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo); // on binde le vbo
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // on binde le m_vbo
     // Vertex input description
 
     glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
@@ -119,17 +120,15 @@ namespace Imaker{
   }
 
 
-
-
   Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(true), position(vecPosition) {
     /*********************************
      * VBO
      *********************************/
 
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
+    GLuint m_vbo;
+    glGenBuffers(1, &m_vbo);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData::positions), cubeData::positions, GL_STATIC_DRAW);
 
@@ -160,7 +159,7 @@ namespace Imaker{
     const GLuint VERTEX_ATTR_POSITION = 0;
     const GLuint VERTEX_ATTR_NORMAL = 1;
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo); // on binde le vbo
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // on binde le m_vbo
     // Vertex input description
 
     glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
@@ -196,7 +195,7 @@ namespace Imaker{
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
 
-    glm::mat4 cubeMVMatrix = glm::translate(globalMVMatrix, position);
+    glm::mat4 cubeMVMatrix = glm::translate(globalMVMatrix, position*glm::vec3(2,2,2)); // position x2 pour éviter le chevauchement des cubes
 
     glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeMVMatrix));
     glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * cubeMVMatrix));
@@ -206,6 +205,7 @@ namespace Imaker{
 
 
     glBindVertexArray(0);
+
   }
 
 
@@ -252,6 +252,10 @@ namespace Imaker{
       //glDrawElements(GL_TRIANGLES, 0, GL_UNSIGNED_SHORT, (void*) 0);
     }
     else std::cout << "Aucun cube à supprimer" << std::endl;
+  }
+
+  void Cube::returnPos() {
+    std::cout << "cube créé à la position " << position << std::endl;
   }
 
 } //namespace
