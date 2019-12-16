@@ -33,7 +33,7 @@ void drawScene(std::vector<std::vector<std::vector<Cube>>> allCubes, glm::mat4 g
   }
 }
 
-void cursorManager(SDL_Event e, Cursor cursor){
+void cursorManager(SDL_Event e, Cursor cursor){ //marche pas
 //  switch(e.key.keysym.sym) {
     std::cout<<"in cursorManager"<<std::endl;
   //     case SDLK_KP_6 :
