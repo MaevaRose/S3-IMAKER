@@ -1,5 +1,3 @@
-#pragma once
-
 #include <glm/glm.hpp>
 #include <vector>
 #include <iostream>
@@ -34,7 +32,7 @@ namespace Imaker{
       position = glm::vec3(2,2,2);
     }
 
-    
+
 
 
     glm::vec3 Cursor::getCursorPos(){

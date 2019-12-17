@@ -19,18 +19,17 @@ include_directories(${SDL2_INCLUDE_DIRS})
 #set(OPENGL_LIBRARIES /usr/lib/x86_64-linux-gnu/libGL.so.1)
 
 include_directories(${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
-include_directories(class/include glimac/include third-party/include third-party/include/imgui)
+include_directories(third-party/include/imgui glimac/include class/include  third-party/include )
 
-set(ALL_LIBRARIES class glimac imgui ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
 
 #Librairies
 add_subdirectory(third-party/include/imgui)
-add_subdirectory(class)
 add_subdirectory(glimac)
+add_subdirectory(class)
 
+set(ALL_LIBRARIES glimac imgui class ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
 
-file(GLOB UP_DIRECTORY "UP*")
+#file(GLOB UP_DIRECTORY "UP*")
 
-foreach(UP ${UP_DIRECTORY})
-    add_subdirectory(${UP})
-endforeach()
+add_subdirectory(UP)
+
