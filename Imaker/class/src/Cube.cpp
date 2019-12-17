@@ -208,6 +208,23 @@ namespace Imaker{
 
   }
 
+  void Cube::drawCubeScaled(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, int width, int length, int height){
+    glBindVertexArray(m_vao);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+
+    glm::mat4 cubeMVMatrix = glm::scale(globalMVMatrix, glm::vec3(width, length, height)); 
+
+    glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeMVMatrix));
+    glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * cubeMVMatrix));
+    glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::NormalMatrix));
+
+    glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
+
+
+    glBindVertexArray(0);
+}
+
 
 
 

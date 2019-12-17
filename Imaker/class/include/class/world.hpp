@@ -1,27 +1,30 @@
 #include <iostream>
-#include <../include/class/Cube.hpp>
+#include <class/Cube.hpp>
 
-class World {
 
-    public:
+namespace Imaker{
+    class World : public Cube {
 
-    //constructor
-    World();
-    World(int height, int width, int len);
+        public:
 
-    //methodes
-    int getHeight();
-    int getWidth();
-    int getLength();
+        //constructor
+        World();
+        World(int height, int width, int len);
 
-    void drawConstrutionArea();
+        //methodes
+        int getHeight();
+        int getWidth();
+        int getLength();
 
-    protected:
+        void drawWorld(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
 
-    //attributs
-    int height;
-    int width;
-    int length;
-    int ground; //POURQUOI ?
-    //std::vector<Cube> allCubes;  
-};
+        protected:
+
+        //attributs
+        int height;
+        int width;
+        int length;
+        int ground; //POURQUOI ?
+        std::vector<Cube> allCubes;  
+    };
+}

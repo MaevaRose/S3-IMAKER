@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <class/Cursor.hpp>
+#include <class/world.hpp>
 
 using namespace glimac;
 using namespace Imaker;
@@ -152,13 +153,19 @@ int main(int argc, char** argv) {
 
      /* Création de la camera */
      TrackBallCamera camera;
-     //déclaration du cube
+
+    //Création world
+    World world(6, 6, 6);
+
+    //déclaration du cube
     //Cube cube;
-     Cube cube2(glm::vec3(2, 0, 0));
-     std::vector<std::vector<std::vector<Cube>>> allCubes(5,std::vector<std::vector<Cube> >(5,std::vector <Cube>(5)));
-     createScene(allCubes);
-     Cursor cursor;
-     glm::vec3 cursorPos;
+    Cube cube2(glm::vec3(2, 0, 0));
+    std::vector<std::vector<std::vector<Cube>>> allCubes(5,std::vector<std::vector<Cube> >(5,std::vector <Cube>(5)));
+    createScene(allCubes);
+    Cursor cursor;
+    glm::vec3 cursorPos;
+
+
 
     // Application loop:
     bool done = false;
@@ -257,27 +264,29 @@ int main(int argc, char** argv) {
         /*********************************
          * RENDERING CODE
          *********************************/
-         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-         globalMVMatrix = camera.getViewMatrix();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        globalMVMatrix = camera.getViewMatrix();
 
-         // //pour afficher le curseur toujours au dessus
-         // glClear(GL_DEPTH_BUFFER_BIT);
+        // //pour afficher le curseur toujours au dessus
+        // glClear(GL_DEPTH_BUFFER_BIT);
 
 
-         glDepthRange(0, 0.01);
+        glDepthRange(0, 0.01);
 
-         cursor.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
-         //cursor.returnPos();
+        world.drawWorld(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+      
+        cursor.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+        //cursor.returnPos();
 
-          // reserve 99% of the back depth range for the 3D axis
-          glDepthRange(0.01, 1.0);
+        // reserve 99% of the back depth range for the 3D axis
+        glDepthRange(0.01, 1.0);
 
-         drawScene(allCubes, globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+        drawScene(allCubes, globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
 
-          // restore depth range
-          glDepthRange(0, 1.0);
+        // restore depth range
+        glDepthRange(0, 1.0);
 
-         //cube.drawCubeRotative(windowManager.getTime(), uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+        //cube.drawCubeRotative(windowManager.getTime(), uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
 
         // Update the display
         windowManager.swapBuffers();
