@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <class/Cursor.hpp>
-#include <class/world.hpp>
+#include <class/World.hpp>
 
 using namespace glimac;
 using namespace Imaker;
