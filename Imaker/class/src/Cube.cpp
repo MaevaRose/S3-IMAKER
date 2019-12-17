@@ -190,7 +190,7 @@ namespace Imaker{
 
 
 
-  void Cube::drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, float width, float length, float height){
+  void Cube::drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
     glBindVertexArray(m_vao);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);

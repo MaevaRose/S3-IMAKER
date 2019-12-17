@@ -32,7 +32,7 @@ namespace Imaker {
             for(int j = 0 ; j < 6 ; j++){
                 for(int k = 0 ; k < 6 ; k++){
                     if(this->allCubes[i][j][k].isVisible()){
-                        this->allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, this->width, this->length, this->height);
+                        this->allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
                     }
                 }
             }
@@ -40,8 +40,6 @@ namespace Imaker {
     }
 
     void World::drawWorld(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc) {
-
-
 
         //Wireframe mode on
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -52,7 +50,7 @@ namespace Imaker {
         //WireframeM mode off
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-        glBindVertexArray(0);
+
     }
 }
 

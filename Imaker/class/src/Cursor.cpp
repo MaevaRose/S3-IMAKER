@@ -82,7 +82,17 @@ namespace Imaker{
       }
     }
 
+  void Cursor::drawCursor(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc) {
+          //Wireframe mode on
+          glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+          //dessin
+          drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+
+          //WireframeM mode off
+          glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+  }
 
 
 }
