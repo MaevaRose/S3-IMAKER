@@ -6,6 +6,9 @@
 #include <iostream>
 #include <vector>
 #include <class/Cursor.hpp>
+#include <imgui/imgui.h>
+// #include <imgui/imgui_demo.cpp>
+//#include <imgui/imgui_internal.h>
 
 using namespace glimac;
 using namespace Imaker;
@@ -21,12 +24,12 @@ void createScene(std::vector<std::vector<std::vector<Cube>>> &allCubes){
   }
 }
 
-void drawScene(std::vector<std::vector<std::vector<Cube>>> allCubes, glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
+void drawScene(std::vector<std::vector<std::vector<Cube>>> allCubes, glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc){
   for(int i = 0 ; i < 5 ; i++ ){
     for(int j = 0 ; j < 5 ; j++){
       for(int k = 0 ; k < 5 ; k++){
         if(allCubes[i][j][k].isVisible()){
-          allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+          allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
         }
       }
     }
@@ -131,6 +134,7 @@ int main(int argc, char** argv) {
      GLint uMVPMatrixLoc = glGetUniformLocation(program.getGLId(), "uMVPMatrix");
      GLint uMVMatrixLoc = glGetUniformLocation(program.getGLId(), "uMVMatrix");
      GLint uNormalMatrixLoc = glGetUniformLocation(program.getGLId(), "uNormalMatrix");
+     GLint cubeColorLoc = glGetUniformLocation(program.getGLId(), "cubeColor");
 
      //empêcher que les triangles invisibles recouvrent ceux devant
      glEnable(GL_DEPTH_TEST);
@@ -232,6 +236,26 @@ int main(int argc, char** argv) {
             cursor.updatePosZ(-1);
             e.type = 0;
           }
+          else if(e.key.keysym.sym == SDLK_y){
+            cursorPos = cursor.getCursorPos();
+            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(1);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_u){
+            cursorPos = cursor.getCursorPos();
+            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(2);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_i){
+            cursorPos = cursor.getCursorPos();
+            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(3);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_o){
+            cursorPos = cursor.getCursorPos();
+            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(4);
+            e.type = 0;
+          }
         }
         break;
 
@@ -260,19 +284,23 @@ int main(int argc, char** argv) {
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
          globalMVMatrix = camera.getViewMatrix();
 
+         //ImGui::Text("Hello, world %d", 123);
+         //ImGui::ShowDemoWindow();
+
+
          // //pour afficher le curseur toujours au dessus
          // glClear(GL_DEPTH_BUFFER_BIT);
 
 
          glDepthRange(0, 0.01);
 
-         cursor.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         cursor.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
          //cursor.returnPos();
 
           // reserve 99% of the back depth range for the 3D axis
           glDepthRange(0.01, 1.0);
 
-         drawScene(allCubes, globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         drawScene(allCubes, globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
 
           // restore depth range
           glDepthRange(0, 1.0);

@@ -32,22 +32,9 @@ namespace Imaker{
 
     Cursor::Cursor(){
       position = glm::vec3(2,2,2);
-      //glGenVertexArrays(1, &m_vao);
-      glBindVertexArray(m_vao);
-
-      const GLuint VERTEX_ATTR_COLOR = 2;
-
-      glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // on binde le vbo
-      // Vertex input description
-
-      glEnableVertexAttribArray(VERTEX_ATTR_COLOR);
-      glVertexAttribPointer(VERTEX_ATTR_COLOR, 3, GL_FLOAT, GL_FALSE,
-        3 * sizeof(float), 0);
-
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
-      glBindVertexArray(0);
     }
 
+    
 
 
     glm::vec3 Cursor::getCursorPos(){
