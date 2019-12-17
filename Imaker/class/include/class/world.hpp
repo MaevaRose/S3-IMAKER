@@ -16,15 +16,17 @@ namespace Imaker{
         int getWidth();
         int getLength();
 
+        void createScene();
+        void drawScene(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
         void drawWorld(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
 
-        protected:
+        public :
 
         //attributs
         int height;
         int width;
         int length;
         int ground; //POURQUOI ?
-        std::vector<Cube> allCubes;  
+        std::vector<std::vector<std::vector<Cube>>> allCubes;  
     };
 }

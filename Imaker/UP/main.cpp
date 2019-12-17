@@ -11,28 +11,6 @@
 using namespace glimac;
 using namespace Imaker;
 
-void createScene(std::vector<std::vector<std::vector<Cube>>> &allCubes){
-  for(int i = 0 ; i < 5 ; i++ ){
-    for(int j = 0 ; j < 5 ; j++){
-      for(int k = 0 ; k < 5 ; k++){
-        Cube temp_cube(glm::vec3(i,j,k));
-        allCubes[i][j][k] = temp_cube;
-      }
-    }
-  }
-}
-
-void drawScene(std::vector<std::vector<std::vector<Cube>>> allCubes, glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
-  for(int i = 0 ; i < 5 ; i++ ){
-    for(int j = 0 ; j < 5 ; j++){
-      for(int k = 0 ; k < 5 ; k++){
-        if(allCubes[i][j][k].isVisible()){
-          allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
-        }
-      }
-    }
-  }
-}
 
 void cursorManager(SDL_Event e, Cursor cursor){ //marche pas
 //  switch(e.key.keysym.sym) {
@@ -160,8 +138,8 @@ int main(int argc, char** argv) {
     //déclaration du cube
     //Cube cube;
     Cube cube2(glm::vec3(2, 0, 0));
-    std::vector<std::vector<std::vector<Cube>>> allCubes(5,std::vector<std::vector<Cube> >(5,std::vector <Cube>(5)));
-    createScene(allCubes);
+    //std::vector<std::vector<std::vector<Cube>>> allCubes(5,std::vector<std::vector<Cube> >(5,std::vector <Cube>(5)));
+    world.createScene();
     Cursor cursor;
     glm::vec3 cursorPos;
 
@@ -207,12 +185,12 @@ int main(int argc, char** argv) {
         { //cursorManager(e, cursor);
           if(e.key.keysym.sym == SDLK_c){
            cursorPos = cursor.getCursorPos();
-           allCubes[cursorPos.x][cursorPos.y][cursorPos.z].fillCube();
+           world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].fillCube();
            e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_v){
             cursorPos = cursor.getCursorPos();
-            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
+            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_6){
@@ -281,7 +259,7 @@ int main(int argc, char** argv) {
         // reserve 99% of the back depth range for the 3D axis
         glDepthRange(0.01, 1.0);
 
-        drawScene(allCubes, globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+        world.drawScene(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
 
         // restore depth range
         glDepthRange(0, 1.0);
