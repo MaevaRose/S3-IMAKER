@@ -253,7 +253,7 @@ int main(int argc, char** argv) {
 
         world.drawWorld(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
       
-        cursor.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+        cursor.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, world.width, world.length, world.height);
         //cursor.returnPos();
 
         // reserve 99% of the back depth range for the 3D axis

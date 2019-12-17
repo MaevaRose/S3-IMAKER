@@ -1,12 +1,12 @@
 #include <iostream>
 #include <vector>
-#include <../include/class/world.hpp>
+#include <../include/class/World.hpp>
 
 namespace Imaker {
 
 
-    World::World() : height(100), width(100), length(100),  ground(0), allCubes(5,std::vector<std::vector<Cube>>(5,std::vector <Cube>(5) ) ) {};
-    World::World(int hei, int wid, int len) : height(hei), width(wid), length(len),  allCubes(5,std::vector<std::vector<Cube>>(5,std::vector <Cube>(5) ) ){};
+    World::World() : height(100), width(100), length(100),  ground(0), allCubes(6,std::vector<std::vector<Cube>>(6,std::vector <Cube>(6) ) ) {};
+    World::World(int hei, int wid, int len) : height(hei), width(wid), length(len),  allCubes(6,std::vector<std::vector<Cube>>(6,std::vector <Cube>(6) ) ){};
 
     int World::getHeight() {
         return this -> height;
@@ -17,9 +17,9 @@ namespace Imaker {
     }
 
     void World::createScene(){
-        for(int i = 0 ; i < 5 ; i++ ){
-            for(int j = 0 ; j < 5 ; j++){
-                for(int k = 0 ; k < 5 ; k++){
+        for(int i = 0 ; i < 6 ; i++ ){
+            for(int j = 0 ; j < 6 ; j++){
+                for(int k = 0 ; k < 6 ; k++){
                     Cube temp_cube(glm::vec3(i,j,k));
                     this->allCubes[i][j][k] = temp_cube;
                 }
@@ -28,11 +28,11 @@ namespace Imaker {
     }
 
     void World::drawScene(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
-        for(int i = 0 ; i < 5 ; i++ ){
-            for(int j = 0 ; j < 5 ; j++){
-                for(int k = 0 ; k < 5 ; k++){
+        for(int i = 0 ; i < 6 ; i++ ){
+            for(int j = 0 ; j < 6 ; j++){
+                for(int k = 0 ; k < 6 ; k++){
                     if(this->allCubes[i][j][k].isVisible()){
-                        this->allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+                        this->allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, this->width, this->length, this->height);
                     }
                 }
             }

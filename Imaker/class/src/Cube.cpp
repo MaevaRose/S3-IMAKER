@@ -13,17 +13,17 @@ namespace cubeData {
     //  v2------v3
     const glm::vec3 positions[] = {
         // Front v0,v1,v2,v3
-        glm::vec3(1, 1, 1), glm::vec3(-1, 1, 1), glm::vec3(-1, -1, 1), glm::vec3(1, -1, 1),
+        glm::vec3(2, 2, 2), glm::vec3(0, 2, 2), glm::vec3(0, 0, 2), glm::vec3(2, 0, 2),
         // Right v0,v3,v4,v5
-        glm::vec3(1, 1, 1), glm::vec3(1, -1, 1), glm::vec3(1, -1, -1), glm::vec3(1, 1, -1),
+        glm::vec3(2, 2, 2), glm::vec3(2, 0, 2), glm::vec3(2, 0, 0), glm::vec3(2, 2, 0),
         // Top v0,v5,v6,v1
-        glm::vec3(1, 1, 1), glm::vec3(1, 1, -1), glm::vec3(-1, 1, -1), glm::vec3(-1, 1, 1),
-        // Left v1,v6,v7,v2
-        glm::vec3(-1, 1, 1), glm::vec3(-1, 1, -1), glm::vec3(-1, -1, -1), glm::vec3(-1, -1, 1),
+        glm::vec3(2, 2, 2), glm::vec3(2, 2, 0), glm::vec3(0, 2, 0), glm::vec3(0, 2, 2),
+        // Left v2,v6,v7,v2
+        glm::vec3(0, 2, 2), glm::vec3(0, 2, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 2),
         // Bottom v7,v4,v3,v2
-        glm::vec3(-1, -1, -1), glm::vec3(1, -1, -1), glm::vec3(1, -1, 1), glm::vec3(-1, -1, 1),
+        glm::vec3(0, 0, 0), glm::vec3(2, 0, 0), glm::vec3(2, 0, 2), glm::vec3(0, 0, 2),
         // Back v4,v7,v6,v5
-        glm::vec3(1, -1, -1), glm::vec3(-1, -1, -1), glm::vec3(-1, 1, -1), glm::vec3(1, 1, -1)
+        glm::vec3(2, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 2, 0), glm::vec3(2, 2, 0)
     };
 
     // const glm::vec3 normals[] = {
@@ -190,12 +190,11 @@ namespace Imaker{
 
 
 
-  void Cube::drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
+  void Cube::drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, float width, float length, float height){
     glBindVertexArray(m_vao);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
-
-    glm::mat4 cubeMVMatrix = glm::translate(globalMVMatrix, position*glm::vec3(2,2,2)); // position x2 pour éviter le chevauchement des cubes
+    glm::mat4 cubeMVMatrix = glm::translate(globalMVMatrix, position * glm::vec3(2,2,2)); // position x2 pour éviter le chevauchement des cubes
 
     glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeMVMatrix));
     glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * cubeMVMatrix));
