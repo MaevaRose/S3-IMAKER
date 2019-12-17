@@ -14,9 +14,9 @@ namespace Imaker{
       Cursor();
 
       glm::vec3 getCursorPos();
-      void updatePosX(int direction);
-      void updatePosY(int direction);
-      void updatePosZ(int direction);
+      void updatePosX(int direction, int width);
+      void updatePosY(int direction, int length);
+      void updatePosZ(int direction, int height);
       void drawCursor(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
 
 

@@ -61,7 +61,7 @@ namespace cubeData {
 
 namespace Imaker{
 
-  Cube::Cube() : visible(true) {
+  Cube::Cube() : visible(false) {
     /*********************************
      * VBO
      *********************************/
@@ -120,7 +120,7 @@ namespace Imaker{
   }
 
 
-  Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(true), position(vecPosition) {
+  Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(false), position(vecPosition) {
     /*********************************
      * VBO
      *********************************/

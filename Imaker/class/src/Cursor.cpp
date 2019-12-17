@@ -56,29 +56,39 @@ namespace Imaker{
 
 
 
-    void Cursor::updatePosX(int direction){
+    void Cursor::updatePosX(int direction, int width){
       std::cout<<"updatePosX"<<std::endl;
       position.x += direction;
       if(position.x < 0){
         position.x = 0;
       }
-    }
-
-
-
-    void Cursor::updatePosY(int direction){
-      position.y += direction;
-      if(position.y < 0){
-        position.y = 0;
+      if(position.x > width) {
+        position.x --;
       }
     }
 
 
 
-    void Cursor::updatePosZ(int direction){
+    void Cursor::updatePosY(int direction, int length){
+      position.y += direction;
+      if(position.y < 0){
+        position.y = 0;
+      }
+      if(position.y > length-1) {
+        position.y --;
+      }
+      std::cout << "pos y = " << position.y << std::endl;
+    }
+
+
+
+    void Cursor::updatePosZ(int direction, int height){
       position.z += direction;
       if(position.z < 0){
         position.z = 0;
+      }
+      if(position.z > height-1) {
+        position.z --;
       }
     }
 

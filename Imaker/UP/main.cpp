@@ -12,69 +12,6 @@ using namespace glimac;
 using namespace Imaker;
 
 
-void cursorManager(SDL_Event e, Cursor cursor){ //marche pas
-//  switch(e.key.keysym.sym) {
-    std::cout<<"in cursorManager"<<std::endl;
-  //     case SDLK_KP_6 :
-  //       {
-  //         cursor.updatePosX(1);
-  //       }
-  //       break;
-  //     case SDLK_KP_4 :
-  //       {
-  //         cursor.updatePosX(-1);
-  //       }
-  //       break;
-  //     case SDLK_KP_8 :
-  //       {
-  //         cursor.updatePosY(1);
-  //       }
-  //       break;
-  //     case SDLK_KP_2 :
-  //       {
-  //         cursor.updatePosY(-1);
-  //       }
-  //       break;
-  //     case SDLK_KP_9 :
-  //       {
-  //         cursor.updatePosZ(1);
-  //       }
-  //       break;
-  //     case SDLK_KP_1 :
-  //     {
-  //       cursor.updatePosZ(-1);
-  //     }
-  //       break;
-  //     default :
-  //       break;
-  // }
-  if(e.key.keysym.sym == SDLK_KP_6){
-    cursor.updatePosX(1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_4){
-    cursor.updatePosX(-1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_8){
-    cursor.updatePosY(1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_2){
-    cursor.updatePosY(-1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_9){
-    cursor.updatePosZ(1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_1){
-    cursor.updatePosZ(-1);
-    e.type = 0;
-  }
-
-}
-
 int main(int argc, char** argv) {
     // Initialize SDL and open a window
     const int WINDOW_HEIGHT = 1200;
@@ -133,7 +70,7 @@ int main(int argc, char** argv) {
      TrackBallCamera camera;
 
     //Création world
-    World world(6, 6, 6);
+    World world(10, 10, 10);
 
     //déclaration du cube
     //Cube cube;
@@ -194,27 +131,27 @@ int main(int argc, char** argv) {
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_6){
-            cursor.updatePosX(1);
+            cursor.updatePosX(1, world.width);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_4){
-            cursor.updatePosX(-1);
+            cursor.updatePosX(-1, world.width);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_8){
-            cursor.updatePosY(1);
+            cursor.updatePosY(1, world.length);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_2){
-            cursor.updatePosY(-1);
+            cursor.updatePosY(-1, world.length);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_9){
-            cursor.updatePosZ(1);
+            cursor.updatePosZ(1, world.height);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_1){
-            cursor.updatePosZ(-1);
+            cursor.updatePosZ(-1, world.height);
             e.type = 0;
           }
         }
