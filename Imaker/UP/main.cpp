@@ -6,36 +6,87 @@
 #include <iostream>
 #include <vector>
 #include <class/Cursor.hpp>
+#include <class/World.hpp>
 #include <class/Interface.hpp>
-// #include <imgui/imgui_demo.cpp>
-//#include <imgui/imgui_internal.h>
 
 using namespace glimac;
 using namespace Imaker;
 
-void createScene(std::vector<std::vector<std::vector<Cube>>> &allCubes){
-  for(int i = 0 ; i < 5 ; i++ ){
-    for(int j = 0 ; j < 5 ; j++){
-      for(int k = 0 ; k < 5 ; k++){
-        Cube temp_cube(glm::vec3(i,j,k));
-        allCubes[i][j][k] = temp_cube;
-      }
-    }
-  }
-}
 
-void drawScene(std::vector<std::vector<std::vector<Cube>>> allCubes, glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc){
+void drawScene(std::vector<std::vector<std::vector<Cube>>> allCubes, glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
   for(int i = 0 ; i < 5 ; i++ ){
     for(int j = 0 ; j < 5 ; j++){
       for(int k = 0 ; k < 5 ; k++){
         if(allCubes[i][j][k].isVisible()){
-          allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
+          allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
         }
       }
     }
   }
 }
 
+void cursorManager(SDL_Event e, Cursor cursor){ //marche pas
+//  switch(e.key.keysym.sym) {
+    std::cout<<"in cursorManager"<<std::endl;
+  //     case SDLK_KP_6 :
+  //       {
+  //         cursor.updatePosX(1);
+  //       }
+  //       break;
+  //     case SDLK_KP_4 :
+  //       {
+  //         cursor.updatePosX(-1);
+  //       }
+  //       break;
+  //     case SDLK_KP_8 :
+  //       {
+  //         cursor.updatePosY(1);
+  //       }
+  //       break;
+  //     case SDLK_KP_2 :
+  //       {
+  //         cursor.updatePosY(-1);
+  //       }
+  //       break;
+  //     case SDLK_KP_9 :
+  //       {
+  //         cursor.updatePosZ(1);
+  //       }
+  //       break;
+  //     case SDLK_KP_1 :
+  //     {
+  //       cursor.updatePosZ(-1);
+  //     }
+  //       break;
+  //     default :
+  //       break;
+  // }
+  if(e.key.keysym.sym == SDLK_KP_6){
+    cursor.updatePosX(1);
+    e.type = 0;
+  }
+  else if(e.key.keysym.sym == SDLK_KP_4){
+    cursor.updatePosX(-1);
+    e.type = 0;
+  }
+  else if(e.key.keysym.sym == SDLK_KP_8){
+    cursor.updatePosY(1);
+    e.type = 0;
+  }
+  else if(e.key.keysym.sym == SDLK_KP_2){
+    cursor.updatePosY(-1);
+    e.type = 0;
+  }
+  else if(e.key.keysym.sym == SDLK_KP_9){
+    cursor.updatePosZ(1);
+    e.type = 0;
+  }
+  else if(e.key.keysym.sym == SDLK_KP_1){
+    cursor.updatePosZ(-1);
+    e.type = 0;
+  }
+
+}
 
 int main(int argc, char** argv) {
     // Initialize SDL and open a window
@@ -96,13 +147,17 @@ int main(int argc, char** argv) {
 
      /* Création de la camera */
      TrackBallCamera camera;
-     //déclaration du cube
+
+    //Création world
+    World world(10, 10, 10);
+
+    //déclaration du cube
     //Cube cube;
-     Cube cube2(glm::vec3(2, 0, 0));
-     std::vector<std::vector<std::vector<Cube>>> allCubes(5,std::vector<std::vector<Cube> >(5,std::vector <Cube>(5)));
-     createScene(allCubes);
-     Cursor cursor;
-     glm::vec3 cursorPos;
+    Cube cube2(glm::vec3(2, 0, 0));
+    //std::vector<std::vector<std::vector<Cube>>> allCubes(5,std::vector<std::vector<Cube> >(5,std::vector <Cube>(5)));
+    world.createScene();
+    Cursor cursor;
+    glm::vec3 cursorPos;
 
 
 
@@ -146,36 +201,36 @@ int main(int argc, char** argv) {
         { //cursorManager(e, cursor);
           if(e.key.keysym.sym == SDLK_c){
            cursorPos = cursor.getCursorPos();
-           allCubes[cursorPos.x][cursorPos.y][cursorPos.z].fillCube();
+           world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].fillCube();
            e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_v){
             cursorPos = cursor.getCursorPos();
-            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
+            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_6){
-            cursor.updatePosX(1);
+            cursor.updatePosX(1, world.width);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_4){
-            cursor.updatePosX(-1);
+            cursor.updatePosX(-1, world.width);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_8){
-            cursor.updatePosY(1);
+            cursor.updatePosY(1, world.length);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_2){
-            cursor.updatePosY(-1);
+            cursor.updatePosY(-1, world.length);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_9){
-            cursor.updatePosZ(1);
+            cursor.updatePosZ(1, world.height);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_1){
-            cursor.updatePosZ(-1);
+            cursor.updatePosZ(-1, world.height);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_y){
@@ -224,25 +279,23 @@ int main(int argc, char** argv) {
         /*********************************
          * RENDERING CODE
          *********************************/
-         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-         globalMVMatrix = camera.getViewMatrix();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        globalMVMatrix = camera.getViewMatrix();
 
          interface.startFrame();
 
 
-         // //pour afficher le curseur toujours au dessus
-         // glClear(GL_DEPTH_BUFFER_BIT);
+        glDepthRange(0, 0.01);
 
+        world.drawWorld(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+      
+        cursor.drawCursor(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+        //cursor.returnPos();
 
-         glDepthRange(0, 0.01);
+        // reserve 99% of the back depth range for the 3D axis
+        glDepthRange(0.01, 1.0);
 
-         cursor.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
-         //cursor.returnPos();
-
-          // reserve 99% of the back depth range for the 3D axis
-          glDepthRange(0.01, 1.0);
-
-         drawScene(allCubes, globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
+        world.drawScene(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
 
           // restore depth range
           glDepthRange(0, 1.0);

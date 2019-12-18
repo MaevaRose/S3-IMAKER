@@ -38,33 +38,53 @@ namespace Imaker{
 
 
 
-    void Cursor::updatePosX(int direction){
+    void Cursor::updatePosX(int direction, int width){
       std::cout<<"updatePosX"<<std::endl;
       position.x += direction;
       if(position.x < 0){
         position.x = 0;
       }
+      if(position.x > width-1) {
+        position.x --;
+      }
     }
 
 
 
-    void Cursor::updatePosY(int direction){
+    void Cursor::updatePosY(int direction, int length){
       position.y += direction;
       if(position.y < 0){
         position.y = 0;
       }
+      if(position.y > length-1) {
+        position.y --;
+      }
+      std::cout << "pos y = " << position.y << std::endl;
     }
 
 
 
-    void Cursor::updatePosZ(int direction){
+    void Cursor::updatePosZ(int direction, int height){
       position.z += direction;
       if(position.z < 0){
         position.z = 0;
       }
+      if(position.z > height-1) {
+        position.z --;
+      }
     }
 
+  void Cursor::drawCursor(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc) {
+          //Wireframe mode on
+          glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+          //dessin
+          drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+
+          //WireframeM mode off
+          glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+  }
 
 
 }
