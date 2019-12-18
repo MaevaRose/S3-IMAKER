@@ -62,7 +62,7 @@ namespace Imaker{
       if(position.x < 0){
         position.x = 0;
       }
-      if(position.x > width) {
+      if(position.x > width-1) {
         position.x --;
       }
     }
