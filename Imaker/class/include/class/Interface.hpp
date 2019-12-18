@@ -6,6 +6,7 @@
 #include <imgui/imgui_impl_opengl3.h>
 #include <stdio.h>
 #include <SDL.h>
+#include "class/Cursor.hpp"
 
 #include <GL/glew.h>
 
@@ -14,12 +15,14 @@ namespace Imaker{
   class Interface {
     public :
       Interface();
-      //~Interface();
+      ~Interface();
       void startFrame();
       void render();
       void swapBuffers();
+      void selectionTypeCube(Cube &cube);
 
     public:
       glimac::SDLWindowManager windowManager;
+      int typeCube;
   };
 }

@@ -309,15 +309,15 @@ namespace Imaker{
 
   void Cube::editColor(int type) {
     switch (type) {
-      case 1: color = glm::vec3(1,0,0);
+      case 0: color = glm::vec3(1,0,0);
         break;
-      case 2: color = glm::vec3(0,1,0);
+      case 1: color = glm::vec3(0,1,0);
         break;
-      case 3: color = glm::vec3(0,0,1);
+      case 2: color = glm::vec3(0,0,1);
         break;
-      case 4: color = glm::vec3(0,1,1);
+      case 3: color = glm::vec3(0,1,1);
         break;
-      default : ; 
+      default : ;
         break;
     }
   }

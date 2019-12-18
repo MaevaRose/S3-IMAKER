@@ -220,6 +220,7 @@ int main(int argc, char** argv) {
            break;
      }
 
+        cursorPos = cursor.getCursorPos();
         /*********************************
          * RENDERING CODE
          *********************************/
@@ -245,6 +246,7 @@ int main(int argc, char** argv) {
 
           // restore depth range
           glDepthRange(0, 1.0);
+          interface.selectionTypeCube(allCubes[cursorPos.x][cursorPos.y][cursorPos.z]);
 
           interface.render();
          //cube.drawCubeRotative(windowManager.getTime(), uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
@@ -252,6 +254,7 @@ int main(int argc, char** argv) {
         // Update the display
         interface.windowManager.swapBuffers();
     }
+
 
     return EXIT_SUCCESS;
 }

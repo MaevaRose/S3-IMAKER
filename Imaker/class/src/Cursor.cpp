@@ -1,9 +1,6 @@
-#include <glm/glm.hpp>
-#include <vector>
-#include <iostream>
 #include "class/Cursor.hpp"
 
-#include "glimac/common.hpp"
+
 
 using namespace glimac;
 
