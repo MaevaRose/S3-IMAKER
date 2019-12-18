@@ -32,12 +32,12 @@ namespace Imaker {
         }
     }
 
-    void World::drawScene(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
+    void World::drawScene(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc){
         for(int i = 0 ; i < this->width ; i++ ){
             for(int j = 0 ; j < this->length ; j++){
                 for(int k = 0 ; k < this->height ; k++){
                     if(this->allCubes[i][j][k].isVisible()){
-                        this->allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+                        this->allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
                     }
                 }
             }
@@ -58,4 +58,3 @@ namespace Imaker {
 
     }
 }
-

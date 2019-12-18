@@ -70,7 +70,7 @@ namespace cubeData {
 
 namespace Imaker{
 
-  Cube::Cube() : visible(true), color(glm::vec3(0,1,1)) {
+  Cube::Cube() : visible(false), color(glm::vec3(0,1,1)) {
 
     /*********************************
      * VBO
@@ -146,7 +146,7 @@ namespace Imaker{
   }
 
 
-  Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(true), position(vecPosition), color(glm::vec3(0,0,1)) {
+  Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(false), position(vecPosition), color(glm::vec3(0,0,1)) {
     /*********************************
      * VBO
      *********************************/
@@ -160,11 +160,6 @@ namespace Imaker{
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-
-    GLuint colorbuffer;
-    glGenBuffers(1, &colorbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 
 
     /*********************************
@@ -190,7 +185,7 @@ namespace Imaker{
 
     const GLuint VERTEX_ATTR_POSITION = 0;
     const GLuint VERTEX_ATTR_NORMAL = 1;
-    const GLuint VERTEX_ATTR_COLOR = 2;
+
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // on binde le m_vbo
     // Vertex input description
@@ -203,14 +198,6 @@ namespace Imaker{
     glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE,
       3 * sizeof(float), 0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-
-    //couleurs
-    glEnableVertexAttribArray(VERTEX_ATTR_COLOR);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    glVertexAttribPointer(VERTEX_ATTR_COLOR, 3, GL_FLOAT, GL_FALSE,
-      3 * sizeof(float),  0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -254,7 +241,7 @@ namespace Imaker{
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
 
-    glm::mat4 cubeMVMatrix = glm::scale(globalMVMatrix, glm::vec3(width, length, height)); 
+    glm::mat4 cubeMVMatrix = glm::scale(globalMVMatrix, glm::vec3(width, length, height));
 
     glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeMVMatrix));
     glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * cubeMVMatrix));

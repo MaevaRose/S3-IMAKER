@@ -18,7 +18,7 @@ namespace Imaker{
       void updatePosX(int direction, int width);
       void updatePosY(int direction, int length);
       void updatePosZ(int direction, int height);
-      void drawCursor(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
+      void drawCursor(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc);
 
 
     private :

@@ -17,7 +17,7 @@ namespace Imaker{
         int getLength();
 
         void createScene();
-        void drawScene(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
+        void drawScene(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc);
         void drawWorld(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
 
         public :
@@ -27,6 +27,6 @@ namespace Imaker{
         int width;
         int length;
         int ground; //POURQUOI ?
-        std::vector<std::vector<std::vector<Cube>>> allCubes;  
+        std::vector<std::vector<std::vector<Cube>>> allCubes;
     };
 }

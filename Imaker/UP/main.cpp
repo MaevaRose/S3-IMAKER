@@ -13,81 +13,6 @@ using namespace glimac;
 using namespace Imaker;
 
 
-void drawScene(std::vector<std::vector<std::vector<Cube>>> allCubes, glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
-  for(int i = 0 ; i < 5 ; i++ ){
-    for(int j = 0 ; j < 5 ; j++){
-      for(int k = 0 ; k < 5 ; k++){
-        if(allCubes[i][j][k].isVisible()){
-          allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
-        }
-      }
-    }
-  }
-}
-
-void cursorManager(SDL_Event e, Cursor cursor){ //marche pas
-//  switch(e.key.keysym.sym) {
-    std::cout<<"in cursorManager"<<std::endl;
-  //     case SDLK_KP_6 :
-  //       {
-  //         cursor.updatePosX(1);
-  //       }
-  //       break;
-  //     case SDLK_KP_4 :
-  //       {
-  //         cursor.updatePosX(-1);
-  //       }
-  //       break;
-  //     case SDLK_KP_8 :
-  //       {
-  //         cursor.updatePosY(1);
-  //       }
-  //       break;
-  //     case SDLK_KP_2 :
-  //       {
-  //         cursor.updatePosY(-1);
-  //       }
-  //       break;
-  //     case SDLK_KP_9 :
-  //       {
-  //         cursor.updatePosZ(1);
-  //       }
-  //       break;
-  //     case SDLK_KP_1 :
-  //     {
-  //       cursor.updatePosZ(-1);
-  //     }
-  //       break;
-  //     default :
-  //       break;
-  // }
-  if(e.key.keysym.sym == SDLK_KP_6){
-    cursor.updatePosX(1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_4){
-    cursor.updatePosX(-1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_8){
-    cursor.updatePosY(1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_2){
-    cursor.updatePosY(-1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_9){
-    cursor.updatePosZ(1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_1){
-    cursor.updatePosZ(-1);
-    e.type = 0;
-  }
-
-}
-
 int main(int argc, char** argv) {
     // Initialize SDL and open a window
     // const int WINDOW_HEIGHT = 1200;
@@ -235,22 +160,22 @@ int main(int argc, char** argv) {
           }
           else if(e.key.keysym.sym == SDLK_y){
             cursorPos = cursor.getCursorPos();
-            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(1);
+            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(1);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_u){
             cursorPos = cursor.getCursorPos();
-            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(2);
+            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(2);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_i){
             cursorPos = cursor.getCursorPos();
-            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(3);
+            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(3);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_o){
             cursorPos = cursor.getCursorPos();
-            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(4);
+            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(4);
             e.type = 0;
           }
         }
@@ -288,18 +213,18 @@ int main(int argc, char** argv) {
         glDepthRange(0, 0.01);
 
         world.drawWorld(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
-      
-        cursor.drawCursor(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+
+        cursor.drawCursor(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
         //cursor.returnPos();
 
         // reserve 99% of the back depth range for the 3D axis
         glDepthRange(0.01, 1.0);
 
-        world.drawScene(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+        world.drawScene(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
 
           // restore depth range
           glDepthRange(0, 1.0);
-          interface.selectionTypeCube(allCubes[cursorPos.x][cursorPos.y][cursorPos.z]);
+          interface.selectionTypeCube(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z]);
 
           interface.render();
          //cube.drawCubeRotative(windowManager.getTime(), uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
