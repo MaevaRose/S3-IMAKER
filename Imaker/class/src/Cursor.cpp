@@ -5,7 +5,6 @@
 using namespace glimac;
 
 namespace cursorData {
-  const glm::vec3 cursorColor(1,0,0);
 
   //calcul ProjMatrix
   glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), //angle vertical de vue

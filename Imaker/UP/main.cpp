@@ -85,6 +85,10 @@ int main(int argc, char** argv) {
     /* Création de la camera */
     TrackBallCamera camera;
 
+    //pour déplacer le curseur pas trop vite
+    int count = 0;
+    int vitesse = 150;
+
 
 
     // Application loop:
@@ -112,19 +116,65 @@ int main(int argc, char** argv) {
            if (e.key.keysym.sym == SDLK_z
                || e.key.keysym.sym == SDLK_UP) {
              //std::cout << "Z or UP pressed" << std::endl;
-             camera.moveFront(zoom);
+             camera.moveFront(-zoom);
            }
            else if (e.key.keysym.sym == SDLK_s
                       || e.key.keysym.sym == SDLK_DOWN) {
              //std::cout << "S or DOWN pressed" << std::endl;
-             camera.moveFront(-zoom);
+             camera.moveFront(zoom);
+           }
+
+           //DEPLACEMENT CURSEUR
+           else if(e.key.keysym.sym == SDLK_KP_6){
+             count++;
+             if(count == vitesse){
+               cursor.updatePosX(1, world.width);
+               count = 0;
+             }
+           }
+           else if(e.key.keysym.sym == SDLK_KP_4){
+             count++;
+             if(count == vitesse){
+               cursor.updatePosX(-1, world.width);
+               count = 0;
+             }
+           }
+           else if(e.key.keysym.sym == SDLK_KP_8){
+             count++;
+             if(count == vitesse){
+               cursor.updatePosY(1, world.length);
+               count = 0;
+             }
+           }
+           else if(e.key.keysym.sym == SDLK_KP_2){
+             count++;
+             if(count == vitesse){
+               cursor.updatePosY(-1, world.length);
+               count = 0;
+             }
+           }
+           else if(e.key.keysym.sym == SDLK_KP_9){
+             count++;
+             if(count == vitesse){
+               cursor.updatePosZ(1, world.height);
+               count = 0;
+             }
+           }
+           else if(e.key.keysym.sym == SDLK_KP_1){
+             count++;
+             if(count == vitesse){
+               cursor.updatePosZ(-1, world.height);
+               count = 0;
+             }
            }
 
          }
          break;
 
       case SDL_KEYUP:
-        { //cursorManager(e, cursor);
+        { count = 149;
+
+
           if(e.key.keysym.sym == SDLK_c){
            cursorPos = cursor.getCursorPos();
            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].fillCube();
@@ -133,30 +183,6 @@ int main(int argc, char** argv) {
           else if(e.key.keysym.sym == SDLK_v){
             cursorPos = cursor.getCursorPos();
             world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
-            e.type = 0;
-          }
-          else if(e.key.keysym.sym == SDLK_KP_6){
-            cursor.updatePosX(1, world.width);
-            e.type = 0;
-          }
-          else if(e.key.keysym.sym == SDLK_KP_4){
-            cursor.updatePosX(-1, world.width);
-            e.type = 0;
-          }
-          else if(e.key.keysym.sym == SDLK_KP_8){
-            cursor.updatePosY(1, world.length);
-            e.type = 0;
-          }
-          else if(e.key.keysym.sym == SDLK_KP_2){
-            cursor.updatePosY(-1, world.length);
-            e.type = 0;
-          }
-          else if(e.key.keysym.sym == SDLK_KP_9){
-            cursor.updatePosZ(1, world.height);
-            e.type = 0;
-          }
-          else if(e.key.keysym.sym == SDLK_KP_1){
-            cursor.updatePosZ(-1, world.height);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_y){
@@ -218,7 +244,7 @@ int main(int argc, char** argv) {
 
         glDepthRange(0, 0.01);
 
-        world.drawWorld(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+
 
         cursor.drawCursor(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
         //cursor.returnPos();
@@ -227,7 +253,7 @@ int main(int argc, char** argv) {
         glDepthRange(0.01, 1.0);
 
         world.drawScene(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
-
+        world.drawWorld(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
           // restore depth range
           glDepthRange(0, 1.0);
           interface.selectionTypeCube(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z]);

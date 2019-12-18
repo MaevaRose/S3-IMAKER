@@ -71,13 +71,33 @@ namespace Imaker{
     ImGui::End();
   }
 
-  void Interface::posCamera(TrackBallCamera camera){
+  void Interface::posCamera(TrackBallCamera &camera){
     ImGui::Begin("Camera");
     ImGui::Text("m_fAngleX: %f", camera.m_fAngleX);
-    ImGui::Text("m_fAngleY: %f", camera.m_fAngleY);
+    ImGui::Text("m_fAngleZ: %f", camera.m_fAngleZ);
     if (ImGui::Button("Recentrer la scène")) {
       camera.defaultPosition();
-      ImGui::Text("hey");
+    }
+    if (ImGui::Button("Front")) {
+      camera.posFront();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Back")) {
+      camera.posBack();
+    }
+    if (ImGui::Button("Left")) {
+      camera.posLeft();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Right")) {
+      camera.posRight();
+    }
+    if (ImGui::Button("Top")) {
+      camera.posTop();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Bottom")) {
+      camera.posBottom();
     }
     ImGui::End();
   }

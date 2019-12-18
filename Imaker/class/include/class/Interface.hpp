@@ -21,7 +21,7 @@ namespace Imaker{
       void render();
       void swapBuffers();
       void selectionTypeCube(Cube &cube);
-      void posCamera(TrackBallCamera camera);
+      void posCamera(TrackBallCamera &camera);
 
     public:
       glimac::SDLWindowManager windowManager;
