@@ -70,8 +70,6 @@ int main(int argc, char** argv) {
      //calcul NormalMatrix avec NormalMatrix=(MV^−1)^T,
      NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
-     /* Création de la camera */
-     TrackBallCamera camera;
 
     //Création world
     World world(10, 10, 10);
@@ -83,6 +81,9 @@ int main(int argc, char** argv) {
     world.createScene();
     Cursor cursor;
     glm::vec3 cursorPos;
+
+    /* Création de la camera */
+    TrackBallCamera camera;
 
 
 
@@ -181,17 +182,22 @@ int main(int argc, char** argv) {
         }
         break;
 
-       case SDL_MOUSEMOTION:
+       case SDL_MOUSEMOTION :
          {
-           float speed = 0.001f;
-           //std::cout << "Mouse move: ";
-           //std::cout << e.motion.xrel << " | " << e.motion.yrel << std::endl;
-           if ( e.motion.xrel != 0 ) {
-             camera.rotateUp( float(e.motion.xrel) * speed);
-           }
-           if ( e.motion.yrel != 0 ) {
-             camera.rotateLeft( float(e.motion.yrel) * speed);
-           }
+           float speed = 0.1f;
+
+           // la scène tourne si le bouton gauche de la souris est enfoncé
+           if (e.motion.state & SDL_BUTTON_LMASK)
+            {
+                if ( e.motion.xrel != 0 ) {
+                  camera.rotateLeft( float(e.motion.xrel) * speed);
+                  e.type = 0;
+                }
+                if ( e.motion.yrel != 0 ) {
+                  camera.rotateUp( float(e.motion.yrel) * speed);
+                  e.type = 0;
+                }
+            }
 
          }
          break;
@@ -205,7 +211,7 @@ int main(int argc, char** argv) {
          * RENDERING CODE
          *********************************/
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        globalMVMatrix = camera.getViewMatrix();
+        globalMVMatrix = camera.getViewMatrix(world);
 
          interface.startFrame();
 
@@ -225,6 +231,7 @@ int main(int argc, char** argv) {
           // restore depth range
           glDepthRange(0, 1.0);
           interface.selectionTypeCube(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z]);
+          interface.posCamera(camera);
 
           interface.render();
          //cube.drawCubeRotative(windowManager.getTime(), uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);

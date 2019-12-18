@@ -1,5 +1,6 @@
 #pragma once
 #include <glimac/SDLWindowManager.hpp>
+#include <glimac/TrackBallCamera.hpp>
 #include <iostream>
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_sdl.h>
@@ -20,6 +21,7 @@ namespace Imaker{
       void render();
       void swapBuffers();
       void selectionTypeCube(Cube &cube);
+      void posCamera(TrackBallCamera camera);
 
     public:
       glimac::SDLWindowManager windowManager;

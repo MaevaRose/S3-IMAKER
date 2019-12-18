@@ -3,8 +3,8 @@
 
 
 namespace Imaker{
-  const int WINDOW_HEIGHT = 1200;
-  const int WINDOW_WIDTH = 1200;
+  const int WINDOW_HEIGHT = 1000;
+  const int WINDOW_WIDTH = 1000;
 
   Interface::Interface() : typeCube(0), windowManager(glimac::SDLWindowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "IMAKER - DURAND - ROSENBERG")) {
     // Initialize glew for OpenGL3+ support
@@ -67,6 +67,17 @@ namespace Imaker{
           }
       }
       ImGui::TreePop();
+    }
+    ImGui::End();
+  }
+
+  void Interface::posCamera(TrackBallCamera camera){
+    ImGui::Begin("Camera");
+    ImGui::Text("m_fAngleX: %f", camera.m_fAngleX);
+    ImGui::Text("m_fAngleY: %f", camera.m_fAngleY);
+    if (ImGui::Button("Recentrer la scène")) {
+      camera.defaultPosition();
+      ImGui::Text("hey");
     }
     ImGui::End();
   }
