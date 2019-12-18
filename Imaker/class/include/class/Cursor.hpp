@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <iostream>
 #include "class/Cube.hpp"
 
 #include "glimac/common.hpp"

@@ -44,6 +44,15 @@ namespace cubeData {
         20,21,22,  22,23,20		  // back
     };
 
+    const glm::vec3 rubiks[] = {
+        glm::vec3(0, 0, 1), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1),
+        glm::vec3(1, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0),
+        glm::vec3(0, 1, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0),
+        glm::vec3(1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(1, 1, 0),
+        glm::vec3(0,1, 1), glm::vec3(0,1, 1), glm::vec3(0,1, 1), glm::vec3(0,1, 1),
+        glm::vec3(1, 0,1), glm::vec3(1, 0,1), glm::vec3(1, 0,1), glm::vec3(1, 0,1)
+    };
+
 
     //calcul ProjMatrix
     glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), //angle vertical de vue
@@ -61,7 +70,8 @@ namespace cubeData {
 
 namespace Imaker{
 
-  Cube::Cube() : visible(true) {
+  Cube::Cube() : visible(true), color(glm::vec3(0,1,1)) {
+
     /*********************************
      * VBO
      *********************************/
@@ -74,6 +84,12 @@ namespace Imaker{
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData::positions), cubeData::positions, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    GLuint colorbuffer;
+    glGenBuffers(1, &colorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData::rubiks), cubeData::rubiks, GL_STATIC_DRAW);
+
 
 
     /*********************************
@@ -99,6 +115,7 @@ namespace Imaker{
 
     const GLuint VERTEX_ATTR_POSITION = 0;
     const GLuint VERTEX_ATTR_NORMAL = 1;
+    const GLuint VERTEX_ATTR_COLOR = 2;
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // on binde le m_vbo
     // Vertex input description
@@ -110,6 +127,15 @@ namespace Imaker{
     glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
     glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE,
       3 * sizeof(float), 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+    //couleurs
+    glEnableVertexAttribArray(VERTEX_ATTR_COLOR);
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glVertexAttribPointer(VERTEX_ATTR_COLOR, 3, GL_FLOAT, GL_FALSE,
+      3 * sizeof(float),  0);
 
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -120,7 +146,13 @@ namespace Imaker{
   }
 
 
-  Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(true), position(vecPosition) {
+  Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(true), position(vecPosition), color(glm::vec3(0,0,1)) {
+
+    glm::vec3 colors[24];
+    for(int i = 0 ; i < 24 ; i++){
+      colors[i] = color;
+    }
+
     /*********************************
      * VBO
      *********************************/
@@ -133,6 +165,12 @@ namespace Imaker{
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData::positions), cubeData::positions, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+    GLuint colorbuffer;
+    glGenBuffers(1, &colorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 
 
     /*********************************
@@ -158,6 +196,7 @@ namespace Imaker{
 
     const GLuint VERTEX_ATTR_POSITION = 0;
     const GLuint VERTEX_ATTR_NORMAL = 1;
+    const GLuint VERTEX_ATTR_COLOR = 2;
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // on binde le m_vbo
     // Vertex input description
@@ -170,6 +209,14 @@ namespace Imaker{
     glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE,
       3 * sizeof(float), 0);
 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+    //couleurs
+    glEnableVertexAttribArray(VERTEX_ATTR_COLOR);
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glVertexAttribPointer(VERTEX_ATTR_COLOR, 3, GL_FLOAT, GL_FALSE,
+      3 * sizeof(float),  0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -190,7 +237,7 @@ namespace Imaker{
 
 
 
-  void Cube::drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
+  void Cube::drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc){
     glBindVertexArray(m_vao);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
@@ -200,6 +247,7 @@ namespace Imaker{
     glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeMVMatrix));
     glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * cubeMVMatrix));
     glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::NormalMatrix));
+    glUniform3fv(cubeColorLoc, 1, glm::value_ptr(color));
 
     glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
 
@@ -224,6 +272,7 @@ namespace Imaker{
     glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(MVMatrix));
     glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * MVMatrix));
     glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::NormalMatrix));
+
 
     glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
 
@@ -256,6 +305,21 @@ namespace Imaker{
 
   void Cube::returnPos() {
     std::cout << "cube créé à la position " << position << std::endl;
+  }
+
+  void Cube::editColor(int type) {
+    switch (type) {
+      case 0: color = glm::vec3(1,0,0);
+        break;
+      case 1: color = glm::vec3(0,1,0);
+        break;
+      case 2: color = glm::vec3(0,0,1);
+        break;
+      case 3: color = glm::vec3(0,1,1);
+        break;
+      default : ;
+        break;
+    }
   }
 
 } //namespace

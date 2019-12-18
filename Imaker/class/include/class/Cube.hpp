@@ -14,12 +14,12 @@ namespace Imaker{
       Cube(glm::vec3 vecPosition);
       ~Cube();
 
-      void drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc); // afficher un cube avec TrackBallCamera
+      void drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc); // afficher un cube avec TrackBallCamera
       void drawCubeRotative(float time, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
       bool isVisible();
       void fillCube();
       void deleteCube();
-      void editColor();
+      void editColor(int type);
       void returnPos();
 
     protected :

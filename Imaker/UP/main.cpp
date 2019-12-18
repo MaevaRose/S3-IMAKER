@@ -6,6 +6,9 @@
 #include <iostream>
 #include <vector>
 #include <class/Cursor.hpp>
+#include <class/Interface.hpp>
+// #include <imgui/imgui_demo.cpp>
+//#include <imgui/imgui_internal.h>
 
 using namespace glimac;
 using namespace Imaker;
@@ -21,96 +24,36 @@ void createScene(std::vector<std::vector<std::vector<Cube>>> &allCubes){
   }
 }
 
-void drawScene(std::vector<std::vector<std::vector<Cube>>> allCubes, glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
+void drawScene(std::vector<std::vector<std::vector<Cube>>> allCubes, glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc){
   for(int i = 0 ; i < 5 ; i++ ){
     for(int j = 0 ; j < 5 ; j++){
       for(int k = 0 ; k < 5 ; k++){
         if(allCubes[i][j][k].isVisible()){
-          allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+          allCubes[i][j][k].drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
         }
       }
     }
   }
 }
 
-void cursorManager(SDL_Event e, Cursor cursor){ //marche pas
-//  switch(e.key.keysym.sym) {
-    std::cout<<"in cursorManager"<<std::endl;
-  //     case SDLK_KP_6 :
-  //       {
-  //         cursor.updatePosX(1);
-  //       }
-  //       break;
-  //     case SDLK_KP_4 :
-  //       {
-  //         cursor.updatePosX(-1);
-  //       }
-  //       break;
-  //     case SDLK_KP_8 :
-  //       {
-  //         cursor.updatePosY(1);
-  //       }
-  //       break;
-  //     case SDLK_KP_2 :
-  //       {
-  //         cursor.updatePosY(-1);
-  //       }
-  //       break;
-  //     case SDLK_KP_9 :
-  //       {
-  //         cursor.updatePosZ(1);
-  //       }
-  //       break;
-  //     case SDLK_KP_1 :
-  //     {
-  //       cursor.updatePosZ(-1);
-  //     }
-  //       break;
-  //     default :
-  //       break;
-  // }
-  if(e.key.keysym.sym == SDLK_KP_6){
-    cursor.updatePosX(1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_4){
-    cursor.updatePosX(-1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_8){
-    cursor.updatePosY(1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_2){
-    cursor.updatePosY(-1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_9){
-    cursor.updatePosZ(1);
-    e.type = 0;
-  }
-  else if(e.key.keysym.sym == SDLK_KP_1){
-    cursor.updatePosZ(-1);
-    e.type = 0;
-  }
-
-}
 
 int main(int argc, char** argv) {
     // Initialize SDL and open a window
-    const int WINDOW_HEIGHT = 1200;
-    const int WINDOW_WIDTH = 1200;
-    SDLWindowManager windowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "IMAKER - DURAND - ROSENBERG");
+    // const int WINDOW_HEIGHT = 1200;
+    // const int WINDOW_WIDTH = 1200;
+    // SDLWindowManager windowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "IMAKER - DURAND - ROSENBERG");
+    //
+    // // Initialize glew for OpenGL3+ support
+    // GLenum glewInitError = glewInit();
+    // if(GLEW_OK != glewInitError) {
+    //     std::cerr << glewGetErrorString(glewInitError) << std::endl;
+    //     return EXIT_FAILURE;
+    // }
+    //
+    // std::cout << "OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
+    // std::cout << "GLEW Version : " << glewGetString(GLEW_VERSION) << std::endl;
 
-    // Initialize glew for OpenGL3+ support
-    GLenum glewInitError = glewInit();
-    if(GLEW_OK != glewInitError) {
-        std::cerr << glewGetErrorString(glewInitError) << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    std::cout << "OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
-    std::cout << "GLEW Version : " << glewGetString(GLEW_VERSION) << std::endl;
+    Interface interface;
 
     /*********************************
      * INITIALIZATION CODE
@@ -131,6 +74,7 @@ int main(int argc, char** argv) {
      GLint uMVPMatrixLoc = glGetUniformLocation(program.getGLId(), "uMVPMatrix");
      GLint uMVMatrixLoc = glGetUniformLocation(program.getGLId(), "uMVMatrix");
      GLint uNormalMatrixLoc = glGetUniformLocation(program.getGLId(), "uNormalMatrix");
+     GLint cubeColorLoc = glGetUniformLocation(program.getGLId(), "cubeColor");
 
      //empêcher que les triangles invisibles recouvrent ceux devant
      glEnable(GL_DEPTH_TEST);
@@ -160,12 +104,14 @@ int main(int argc, char** argv) {
      Cursor cursor;
      glm::vec3 cursorPos;
 
+
+
     // Application loop:
     bool done = false;
     while(!done) {
         // Event loop:
         SDL_Event e;
-        while(windowManager.pollEvent(e)) {
+        while(interface.windowManager.pollEvent(e)) {
             if(e.type == SDL_QUIT) {
                 done = true; // Leave the loop after this iteration
             }
@@ -232,12 +178,32 @@ int main(int argc, char** argv) {
             cursor.updatePosZ(-1);
             e.type = 0;
           }
+          else if(e.key.keysym.sym == SDLK_y){
+            cursorPos = cursor.getCursorPos();
+            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(1);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_u){
+            cursorPos = cursor.getCursorPos();
+            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(2);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_i){
+            cursorPos = cursor.getCursorPos();
+            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(3);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_o){
+            cursorPos = cursor.getCursorPos();
+            allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(4);
+            e.type = 0;
+          }
         }
         break;
 
        case SDL_MOUSEMOTION:
          {
-           float speed = 0.01f;
+           float speed = 0.001f;
            //std::cout << "Mouse move: ";
            //std::cout << e.motion.xrel << " | " << e.motion.yrel << std::endl;
            if ( e.motion.xrel != 0 ) {
@@ -254,11 +220,15 @@ int main(int argc, char** argv) {
            break;
      }
 
+        cursorPos = cursor.getCursorPos();
         /*********************************
          * RENDERING CODE
          *********************************/
          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
          globalMVMatrix = camera.getViewMatrix();
+
+         interface.startFrame();
+
 
          // //pour afficher le curseur toujours au dessus
          // glClear(GL_DEPTH_BUFFER_BIT);
@@ -266,22 +236,25 @@ int main(int argc, char** argv) {
 
          glDepthRange(0, 0.01);
 
-         cursor.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         cursor.drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
          //cursor.returnPos();
 
           // reserve 99% of the back depth range for the 3D axis
           glDepthRange(0.01, 1.0);
 
-         drawScene(allCubes, globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+         drawScene(allCubes, globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
 
           // restore depth range
           glDepthRange(0, 1.0);
+          interface.selectionTypeCube(allCubes[cursorPos.x][cursorPos.y][cursorPos.z]);
 
+          interface.render();
          //cube.drawCubeRotative(windowManager.getTime(), uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
 
         // Update the display
-        windowManager.swapBuffers();
+        interface.windowManager.swapBuffers();
     }
+
 
     return EXIT_SUCCESS;
 }

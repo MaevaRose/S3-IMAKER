@@ -4,7 +4,7 @@ namespace glimac {
 
   class TrackBallCamera {
     public :
-    TrackBallCamera() : m_fDistance(5.f), m_fAngleX(0.f), m_fAngleY(0.f) {};
+    TrackBallCamera() : m_fDistance(30.f), m_fAngleX(0.f), m_fAngleY(0.f) {};
 
     void moveFront(float delta){
       m_fDistance += delta;

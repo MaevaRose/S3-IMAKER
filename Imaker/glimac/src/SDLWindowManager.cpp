@@ -16,7 +16,7 @@ SDLWindowManager::SDLWindowManager(uint32_t width, uint32_t height, const char* 
 
     window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL);
 
-    SDL_GLContext openglContext = SDL_GL_CreateContext (window);
+    openglContext = SDL_GL_CreateContext (window);
 
     std::cout <<  glGetString (GL_VERSION) << std::endl;
 
@@ -58,4 +58,3 @@ float SDLWindowManager::getTime() const {
 }
 
 }
-
