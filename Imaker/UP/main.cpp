@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
      TrackBallCamera camera;
 
     //Création world
-    World world(10, 10, 10);
+    World world(20, 20, 20);
 
     //déclaration du cube
     //Cube cube;

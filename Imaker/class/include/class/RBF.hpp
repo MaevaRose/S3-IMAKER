@@ -3,26 +3,30 @@
 #include <iostream>
 #include <vector>
 #include <glimac/glm.hpp>
+#include <Eigen/Dense>
+
+using namespace Eigen;
+
+
 
 class InterpolationFunc {
     public :
 
     //constructor
     InterpolationFunc();
-    InterpolationFunc(std::vector<glm::vec3> p, std::vector<float> u, int indiceRBF);
+    InterpolationFunc(std::vector<glm::vec2> p, std::vector<float> u, int indiceRBF);
 
     //Methodes
     void calculW();
     float calculInterpolation(int posX, int posY);
+    MatrixXd buildMatContrainte();
     
 
     private : 
 
     //attributs
-    std::vector<std::vector<float>> P;
+    std::vector<glm::vec2> position;
     std::vector<float> U;
     int rbfAssociate;
     std::vector<float> w;
 };
-
-void distance(float Xa, float Xb, float Ya, float Yb);
