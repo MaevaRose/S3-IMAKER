@@ -4,6 +4,7 @@
 #include <vector>
 #include <glimac/glm.hpp>
 #include <Eigen/Dense>
+#include <stdlib.h>
 
 using namespace Eigen;
 
@@ -26,7 +27,7 @@ class InterpolationFunc {
 
     //attributs
     std::vector<glm::vec2> position;
-    std::vector<float> U;
+    VectorXd poids;
     int rbfAssociate;
     std::vector<float> w;
 };
