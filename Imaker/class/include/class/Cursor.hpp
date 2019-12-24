@@ -13,6 +13,7 @@ namespace Imaker{
   class Cursor : public Cube {
     public :
       Cursor();
+      ~Cursor();
 
       glm::vec3 getCursorPos();
       void updatePosX(int direction, int width);

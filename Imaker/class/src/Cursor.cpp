@@ -28,7 +28,10 @@ namespace Imaker{
       position = glm::vec3(2,2,2);
     }
 
-
+    Cursor::~Cursor(){
+      glDeleteBuffers(1, &m_vbo);
+      glDeleteVertexArrays(1, &m_vao);
+    }
 
 
     glm::vec3 Cursor::getCursorPos(){

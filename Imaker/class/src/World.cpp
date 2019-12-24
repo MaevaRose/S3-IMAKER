@@ -8,6 +8,7 @@ namespace Imaker {
     World::World() : height(100), width(100), length(100),  ground(0), allCubes(100,std::vector<std::vector<Cube>>(100,std::vector <Cube>(100) ) ) {};
     World::World(int hei, int wid, int len) : height(hei), width(wid), length(len), ground(0),  allCubes(wid,std::vector<std::vector<Cube>>(len,std::vector <Cube>(hei) ) ) {};
 
+
     int World::getHeight() {
         return this -> height;
     }

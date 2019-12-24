@@ -20,11 +20,12 @@ namespace Imaker{
       void startFrame();
       void render();
       void swapBuffers();
-      void selectionTypeCube(Cube &cube);
+      void selectionTypeCube(Cube &cube, World world);
       void posCamera(TrackBallCamera &camera);
 
     public:
       glimac::SDLWindowManager windowManager;
+      ImGuiIO io;
       int typeCube;
   };
 }

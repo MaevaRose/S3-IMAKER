@@ -12,6 +12,7 @@ namespace Imaker{
         World();
         World(int height, int width, int len);
 
+
         //methodes
         int getHeight();
         int getWidth();
@@ -29,5 +30,6 @@ namespace Imaker{
         int length;
         int ground; //POURQUOI ?
         std::vector<std::vector<std::vector<Cube>>> allCubes;
+        std::vector<cubeType> allCubeTypes;
     };
 }

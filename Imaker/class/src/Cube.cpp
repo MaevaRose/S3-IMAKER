@@ -70,7 +70,7 @@ namespace cubeData {
 
 namespace Imaker{
 
-  Cube::Cube() : visible(false), color(glm::vec3(0,1,1)) {
+  Cube::Cube() : visible(false), color(glm::vec3(0,1,1)), type(glm::vec3(0,1,1)) {
 
     /*********************************
      * VBO
@@ -146,7 +146,7 @@ namespace Imaker{
   }
 
 
-  Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(false), position(vecPosition), color(glm::vec3(0,0,1)) {
+  Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(false), position(vecPosition), color(glm::vec3(0,0,1)), type(glm::vec3(0,0,1)) {
     /*********************************
      * VBO
      *********************************/
@@ -214,7 +214,10 @@ namespace Imaker{
 
   }
 
-
+  void Cube::destroy(){
+    glDeleteBuffers(1, &m_vbo);
+    glDeleteVertexArrays(1, &m_vao);
+  }
 
 
 
@@ -227,7 +230,7 @@ namespace Imaker{
     glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeMVMatrix));
     glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * cubeMVMatrix));
     glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::NormalMatrix));
-    glUniform3fv(cubeColorLoc, 1, glm::value_ptr(color));
+    glUniform3fv(cubeColorLoc, 1, glm::value_ptr(type.color));
 
     glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
 
@@ -246,7 +249,7 @@ namespace Imaker{
     glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeMVMatrix));
     glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * cubeMVMatrix));
     glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::NormalMatrix));
-    glUniform3fv(cubeColorLoc, 1, glm::value_ptr(color));
+    glUniform3fv(cubeColorLoc, 1, glm::value_ptr(type.color));
 
     glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
 
@@ -318,6 +321,10 @@ namespace Imaker{
       default : ;
         break;
     }
+  }
+
+  void Cube::editType(cubeType newType){
+      type = newType;
   }
 
 } //namespace

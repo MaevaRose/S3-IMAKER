@@ -13,21 +13,19 @@ using namespace glimac;
 using namespace Imaker;
 
 
+void destroyWorld(World &world, Cursor &cursor){
+  cursor.destroy();
+  for(int i = 0 ; i < world.width ; i++ ){
+      for(int j = 0 ; j < world.length ; j++){
+          for(int k = 0 ; k < world.height ; k++){
+              world.allCubes[i][j][k].destroy();
+          }
+      }
+  }
+  world.destroy();
+}
+
 int main(int argc, char** argv) {
-    // Initialize SDL and open a window
-    // const int WINDOW_HEIGHT = 1200;
-    // const int WINDOW_WIDTH = 1200;
-    // SDLWindowManager windowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "IMAKER - DURAND - ROSENBERG");
-    //
-    // // Initialize glew for OpenGL3+ support
-    // GLenum glewInitError = glewInit();
-    // if(GLEW_OK != glewInitError) {
-    //     std::cerr << glewGetErrorString(glewInitError) << std::endl;
-    //     return EXIT_FAILURE;
-    // }
-    //
-    // std::cout << "OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
-    // std::cout << "GLEW Version : " << glewGetString(GLEW_VERSION) << std::endl;
 
     Interface interface;
 
@@ -52,6 +50,13 @@ int main(int argc, char** argv) {
      GLint uNormalMatrixLoc = glGetUniformLocation(program.getGLId(), "uNormalMatrix");
      GLint cubeColorLoc = glGetUniformLocation(program.getGLId(), "cubeColor");
 
+     //Pour le modèle de blinnPhong
+     GLint uKd = glGetUniformLocation(program.getGLId(), "uKd");
+     GLint uKs = glGetUniformLocation(program.getGLId(), "uKs");
+     GLint uShininess = glGetUniformLocation(program.getGLId(), "uShininess");
+     GLint uLightDir = glGetUniformLocation(program.getGLId(), "uLightDir_vs");
+     GLint uLightIntensity = glGetUniformLocation(program.getGLId(), "uLightIntensity");
+
      //empêcher que les triangles invisibles recouvrent ceux devant
      glEnable(GL_DEPTH_TEST);
 
@@ -59,8 +64,8 @@ int main(int argc, char** argv) {
      glm::mat4 ProjMatrix, MVMatrix, NormalMatrix, globalMVMatrix;
 
      //calcul ProjMatrix
-     ProjMatrix = glm::perspective(glm::radians(70.f), //angle vertical de vue
-                                   1.f, // ratio largeur/hauteur de la fenêtre
+     ProjMatrix = glm::perspective(glm::radians(50.f), //angle vertical de vue
+                                   1.8f, // ratio largeur/hauteur de la fenêtre
                                  0.1f, // near et
                                100.f); //far définissent une range de vision sur l'axe de la profondeur
 
@@ -72,13 +77,14 @@ int main(int argc, char** argv) {
 
 
     //Création world
-    World world(10, 10, 10);
+    World world(25, 25, 25);
 
     //déclaration du cube
     //Cube cube;
-    Cube cube2(glm::vec3(2, 0, 0));
+    Cube cube2(glm::vec3(20, 20, 20));
     //std::vector<std::vector<std::vector<Cube>>> allCubes(5,std::vector<std::vector<Cube> >(5,std::vector <Cube>(5)));
     world.createScene();
+    world.allCubeTypes.push_back(glm::vec3(0,1,0));
     Cursor cursor;
     glm::vec3 cursorPos;
 
@@ -87,7 +93,7 @@ int main(int argc, char** argv) {
 
     //pour déplacer le curseur pas trop vite
     int count = 0;
-    int vitesse = 150;
+    int vitesse = 100;
 
 
 
@@ -100,19 +106,28 @@ int main(int argc, char** argv) {
             if(e.type == SDL_QUIT) {
                 done = true; // Leave the loop after this iteration
             }
-            if( e.type == SDL_KEYDOWN && (e.key.keysym.sym == SDLK_q || e.key.keysym.sym == SDLK_ESCAPE))
-            {
-                done = true;
-                break;
-            }
+
         }
+    //Pas de sdl event si on est sur une fenêtre ImGui
+    interface.io = ImGui::GetIO();
+    if(interface.io.WantCaptureMouse){
+      ImGui::CaptureKeyboardFromApp(true);
+    }
+    else{
+      ImGui::CaptureKeyboardFromApp(false);
+
+      if( e.type == SDL_KEYDOWN && (e.key.keysym.sym == SDLK_q || e.key.keysym.sym == SDLK_ESCAPE))
+      {
+          done = true;
+          break;
+      }
 
       switch(e.type) {
 
          /* Touche clavier */
        case SDL_KEYDOWN:
          {
-           float zoom = 0.01f;
+           float zoom = 0.1f;
            if (e.key.keysym.sym == SDLK_z
                || e.key.keysym.sym == SDLK_UP) {
              //std::cout << "Z or UP pressed" << std::endl;
@@ -172,7 +187,7 @@ int main(int argc, char** argv) {
          break;
 
       case SDL_KEYUP:
-        { count = 149;
+        { count = 99;
 
 
           if(e.key.keysym.sym == SDLK_c){
@@ -228,18 +243,44 @@ int main(int argc, char** argv) {
          }
          break;
 
+       case SDL_MOUSEWHEEL : {
+         float zoom = 1.f;
+         if(e.wheel.y > 0) // scroll up
+         {
+            camera.moveFront(-zoom);
+            e.type = 0;
+          }
+          else if(e.wheel.y < 0) // scroll down
+          {
+            camera.moveFront(zoom);
+            e.type = 0;
+          }
+       }
+
        default:
            break;
      }
+   }//interface hovered or not
 
         cursorPos = cursor.getCursorPos();
+        //std::cout<<interface.io.WantCaptureMouse<<std::endl;
         /*********************************
          * RENDERING CODE
          *********************************/
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         globalMVMatrix = camera.getViewMatrix(world);
 
-         interface.startFrame();
+        glm::vec4 lightDir4 =  glm::vec4(1.0f, 1.0f, 1.0f, 0.0f);
+        lightDir4 =  globalMVMatrix * lightDir4;
+        glm::vec3 lightDir = glm::vec3(lightDir.x, lightDir.y, lightDir.z);
+
+       glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0.2, 0.2, 0.2)));
+       glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0.2, 0.2, 0.2)));
+       glUniform1f(uShininess, 0.1);
+       glUniform3fv(uLightDir, 1, glm::value_ptr(glm::vec3(1.f)));
+       glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0.5,0.5,0.5)));
+
+       interface.startFrame();
 
 
         glDepthRange(0, 0.01);
@@ -256,7 +297,7 @@ int main(int argc, char** argv) {
         world.drawWorld(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
           // restore depth range
           glDepthRange(0, 1.0);
-          interface.selectionTypeCube(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z]);
+          interface.selectionTypeCube(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], world);
           interface.posCamera(camera);
 
           interface.render();
@@ -266,6 +307,7 @@ int main(int argc, char** argv) {
         interface.windowManager.swapBuffers();
     }
 
+    destroyWorld(world, cursor);
 
     return EXIT_SUCCESS;
 }

@@ -36,37 +36,37 @@ namespace glimac {
     }
 
     void posTop(){
-      m_fDistance = 30.f;
+      m_fDistance = 60.f;
       m_fAngleX = 0.f;
       m_fAngleZ = 0.f;
     }
 
     void posBottom(){
-      m_fDistance = 30.f;
+      m_fDistance = 60.f;
       m_fAngleX = 180.f;
       m_fAngleZ = 0.f;
     }
 
     void posLeft(){
-      m_fDistance = 30.f;
+      m_fDistance = 60.f;
       m_fAngleX = -90.f;
       m_fAngleZ = 90.f;
     }
 
     void posRight(){
-      m_fDistance = 30.f;
+      m_fDistance = 60.f;
       m_fAngleX = -90.f;
       m_fAngleZ = -90.f;
     }
 
     void posFront(){
-      m_fDistance = 30.f;
+      m_fDistance = 60.f;
       m_fAngleX = -90.f;
       m_fAngleZ = 0.f;
     }
 
     void posBack(){
-      m_fDistance = 30.f;
+      m_fDistance = 60.f;
       m_fAngleX = -90.f;
       m_fAngleZ = 180.f;
     }

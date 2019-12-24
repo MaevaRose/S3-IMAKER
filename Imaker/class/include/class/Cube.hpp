@@ -2,11 +2,25 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <string>
 
 #include "glimac/common.hpp"
 
 using namespace glimac;
 namespace Imaker{
+
+  struct cubeType {
+    glm::vec3 color;
+    //string name;
+
+    cubeType(){
+
+    }
+
+    cubeType(glm::vec3 colors){
+      color = colors;
+    }
+  };
 
   class Cube {
     public :
@@ -21,7 +35,9 @@ namespace Imaker{
       void fillCube();
       void deleteCube();
       void editColor(int type);
+      void editType(cubeType newType);
       void returnPos();
+      void destroy();
 
     protected :
       GLuint m_vao;
@@ -30,6 +46,7 @@ namespace Imaker{
 
       glm::vec3 position;
       glm::vec3 color;
+      cubeType type;
       bool visible;
 
   };
