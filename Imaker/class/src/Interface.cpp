@@ -6,7 +6,7 @@ namespace Imaker{
   const int WINDOW_HEIGHT = 1000;
   const int WINDOW_WIDTH = 1000;
 
-  Interface::Interface() : typeCube(0), windowManager(glimac::SDLWindowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "IMAKER - DURAND - ROSENBERG")) {
+  Interface::Interface() : typeCube(0), currentColor(ImVec4(114.0f/255.0f, 144.0f/255.0f, 154.0f/255.0f, 255.0f/255.0f)), windowManager(glimac::SDLWindowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "IMAKER - DURAND - ROSENBERG")) {
     // Initialize glew for OpenGL3+ support
 
     GLenum glewInitError = glewInit();
@@ -33,6 +33,10 @@ namespace Imaker{
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
+
+    SDL_StartTextInput();
+
+
 
   }
 
@@ -73,20 +77,32 @@ namespace Imaker{
   //   ImGui::End();
   // }
 
-  void Interface::selectionTypeCube(Cube &cube, World world){
+  void Interface::selectionTypeCube(Cube &cube, World &world){
     ImGui::Begin("Cube Type");
     //ImGui::Button("Sélectionner Type!");
+    ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_DisplayRGB;
     if (ImGui::TreeNode("Selection Type")){
       for (int n = 0; n < world.allCubeTypes.size(); n++)
       {
-          char buf[32];
-          sprintf(buf, "Type %d", n);
-          if (ImGui::Selectable(buf, typeCube == n)){
+          if (ImGui::Selectable(world.allCubeTypes[n].name, n)){
             cube.editType(world.allCubeTypes[n]);
           }
       }
       ImGui::TreePop();
     }
+    if(ImGui::TreeNode("Add New Type")){
+      const char* label = "Test";
+      //std::string* value;
+      char value[32];
+      ImGui::InputText(label, value, 32);
+      ImGui::ColorPicker4("MyColor##4", (float*)&currentColor, flags, NULL);
+      if (ImGui::Button("Add")) {
+        //std::string temp_value = *value;
+        world.createNewCubeType(glm::vec3(currentColor.x, currentColor.y, currentColor.z), value);
+      }
+      ImGui::TreePop();
+    }
+
     ImGui::End();
   }
 
@@ -119,6 +135,29 @@ namespace Imaker{
       camera.posBottom();
     }
     ImGui::End();
+  }
+
+  void Interface::MainMenuBar(){
+    //menu bar de la démo
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            //ShowExampleMenuFile();
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Edit"))
+        {
+            if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+            ImGui::Separator();
+            if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+            if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+            if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
   }
 
   void Interface::render(){

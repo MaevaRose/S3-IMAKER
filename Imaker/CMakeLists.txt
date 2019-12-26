@@ -29,7 +29,7 @@ add_subdirectory(class)
 
 set(ALL_LIBRARIES glimac imgui class ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
 
-#file(GLOB UP_DIRECTORY "UP*")
+file(GLOB UP_DIRECTORY "UP*")
 
 add_subdirectory(UP)
 

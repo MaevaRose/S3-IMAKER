@@ -5,6 +5,7 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_sdl.h>
 #include <imgui/imgui_impl_opengl3.h>
+#include <imgui/imgui_stdlib.h>
 #include <stdio.h>
 #include <SDL.h>
 #include "class/Cursor.hpp"
@@ -20,12 +21,14 @@ namespace Imaker{
       void startFrame();
       void render();
       void swapBuffers();
-      void selectionTypeCube(Cube &cube, World world);
+      void selectionTypeCube(Cube &cube, World &world);
       void posCamera(TrackBallCamera &camera);
+      void MainMenuBar();
 
     public:
       glimac::SDLWindowManager windowManager;
       ImGuiIO io;
       int typeCube;
+      ImVec4 currentColor;
   };
 }

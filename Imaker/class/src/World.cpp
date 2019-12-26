@@ -18,7 +18,7 @@ namespace Imaker {
     }
 
     void World::createScene(){
-        color = glm::vec3(1,1,1);
+        type = cubeType(glm::vec3(1,1,1), "Blanc");
         for(int i = 0 ; i < this->width ; i++ ){
             for(int j = 0 ; j < this->length ; j++){
                 for(int k=0; k<3; k++) {
@@ -58,5 +58,11 @@ namespace Imaker {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 
+    }
+
+
+
+    void World::createNewCubeType(glm::vec3 color, char cubeName[32]){
+      allCubeTypes.push_back(cubeType(color, cubeName));
     }
 }
