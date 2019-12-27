@@ -5,12 +5,14 @@
 #include <fstream>
 #include <class/World.hpp>
 
+
 namespace Imaker{
   class File {
     public :
       File();
-      File(std::string openFile);
+      File(glm::vec3 tailleWorld);
       ~File();
+      void openFile(std::string File);
       void createWorldFromFile();
       void saveFile();
       void saveNewFile();

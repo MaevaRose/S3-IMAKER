@@ -5,7 +5,11 @@ File::File() : world(World(25,25,25)), fileName("NewFile") {
   world.createScene();
 };
 
-File::File(std::string openFile){
+File::File(glm::vec3 tailleWorld) : world(World(tailleWorld.x, tailleWorld.y ,tailleWorld.z)), fileName("NewFile") {
+  world.createScene();
+}
+
+void File::openFile(std::string File){
   std::string ligne;
   std::string mot;
   int nombre;
@@ -14,12 +18,8 @@ File::File(std::string openFile){
   int x = -1, y = -1, z = -1;
   std::string typeName;
 
-  std::string chemin = "../Imaker/assets/data/";
-	std::string fileImaker = chemin+openFile;
-	std::cout<<fileImaker<<std::endl;
-
-	std::string const fileName(fileImaker);
-	std::ifstream file(fileName.c_str());
+	std::string const openFileName(File);
+	std::ifstream file(openFileName.c_str());
 
   if(!file){std::cout<<"Impossible d'ouvrir le fichier"<<std::endl; exit(0);}
 

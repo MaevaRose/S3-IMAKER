@@ -6,9 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <class/Cursor.hpp>
-#include <class/World.hpp>
 #include <class/Interface.hpp>
-#include <class/File.hpp>
 
 using namespace glimac;
 using namespace Imaker;
@@ -79,9 +77,8 @@ int main(int argc, char** argv) {
 
     //Création currentFile.world
     //World world(25, 25, 25);
-    File currentFile("save1.imaker");
-
-    //déclaration du cube
+    //File currentFile("/home/maeva/Documents/PROJET_S3/S3-IMAKER/Imaker/assets/data/save1.imaker");
+    File currentFile;    //déclaration du cube
     //Cube cube;
     //Cube cube2(glm::vec3(20, 20, 20));
     //std::vector<std::vector<std::vector<Cube>>> allCubes(5,std::vector<std::vector<Cube> >(5,std::vector <Cube>(5)));
@@ -118,7 +115,9 @@ int main(int argc, char** argv) {
 
         cursorPos = cursor.getCursorPos();
         interface.startFrame();
-        interface.MainMenuBar();
+        interface.MainMenuBar(currentFile);
+        interface.browserFile(currentFile);
+        interface.createNewWorldWindow(currentFile);
         interface.selectionTypeCube(currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], currentFile.world);
     //Pas de sdl event si on est sur une fenêtre ImGui
     interface.io = ImGui::GetIO();

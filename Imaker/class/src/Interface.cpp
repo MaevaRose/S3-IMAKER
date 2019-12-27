@@ -5,6 +5,15 @@
 namespace Imaker{
   const int WINDOW_HEIGHT = 1000;
   const int WINDOW_WIDTH = 1000;
+  bool browserIsOpen = false;
+  bool createNewWorld = false;
+
+
+  void sautDeLigne(int lignes){
+    for(int i = 0 ; i < lignes ; i++){
+      ImGui::Text(" ");
+    }
+  }
 
   Interface::Interface() : typeCube(0), currentColor(ImVec4(114.0f/255.0f, 144.0f/255.0f, 154.0f/255.0f, 255.0f/255.0f)), windowManager(glimac::SDLWindowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "IMAKER - DURAND - ROSENBERG")) {
     // Initialize glew for OpenGL3+ support
@@ -59,23 +68,6 @@ namespace Imaker{
     ImGui::ShowDemoWindow();
   }
 
-  // void Interface::selectionTypeCube(Cube &cube){
-  //   ImGui::Begin("Cube Type");
-  //   //ImGui::Button("Sélectionner Type!");
-  //   if (ImGui::TreeNode("Selection Type")){
-  //     for (int n = 0; n < 5; n++)
-  //     {
-  //         char buf[32];
-  //         sprintf(buf, "Type %d", n);
-  //         if (ImGui::Selectable(buf, typeCube == n)){
-  //           typeCube = n;
-  //           cube.editColor(typeCube);
-  //         }
-  //     }
-  //     ImGui::TreePop();
-  //   }
-  //   ImGui::End();
-  // }
 
   void Interface::selectionTypeCube(Cube &cube, World &world){
     ImGui::Begin("Cube Type");
@@ -137,13 +129,18 @@ namespace Imaker{
     ImGui::End();
   }
 
-  void Interface::MainMenuBar(){
+  void Interface::MainMenuBar(File &file){
     //menu bar de la démo
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
         {
-            //ShowExampleMenuFile();
+            if (ImGui::MenuItem("New World", "")) {
+              createNewWorld = true;
+            }
+            if (ImGui::MenuItem("Open World", "")) {
+              browserIsOpen = true;
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit"))
@@ -157,6 +154,58 @@ namespace Imaker{
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
+    }
+  }
+
+void Interface::browserFile(File &file){
+    // open Dialog Simple
+     //ImGui::Begin("Open");
+     if (browserIsOpen)
+      ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".imaker\0\0", ".");
+
+    // display
+    if (ImGuiFileDialog::Instance()->FileDialog("ChooseFileDlgKey"))
+    {
+      // action if OK
+      if (ImGuiFileDialog::Instance()->IsOk == true)
+      {
+        std::string filePathName = ImGuiFileDialog::Instance()->GetFilepathName();
+        file.openFile(filePathName);
+        // action
+      }
+      // close
+      ImGuiFileDialog::Instance()->CloseDialog("ChooseFileDlgKey");
+      browserIsOpen = false;
+    }
+    //ImGui::End();
+  }
+
+  void Interface::createNewWorldWindow(File &file){
+    ImGui::SetNextWindowPos(ImVec2(WINDOW_HEIGHT/4, WINDOW_WIDTH/4), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(WINDOW_HEIGHT/2, WINDOW_WIDTH/2), ImGuiCond_FirstUseEver);
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
+    if (createNewWorld){
+      static int height = 25, width = 25, length = 25;
+
+      ImGui::Begin("Create New World", NULL, window_flags);
+        sautDeLigne(8);
+        ImGui::SameLine(150); ImGui::Text("Créez un nouveau monde !");
+        sautDeLigne(3);
+        ImGui::SameLine(80); ImGui::SliderInt("Hauteur", &height, 1, 50);
+        sautDeLigne(1);
+        ImGui::SameLine(80); ImGui::SliderInt("Largeur", &width, 1, 50);
+        sautDeLigne(1);
+        ImGui::SameLine(80); ImGui::SliderInt("Longueur", &length, 1, 50);
+        sautDeLigne(6);
+        if (ImGui::Button("Annuler")) {
+          createNewWorld = false;
+        }
+        ImGui::SameLine(100);
+        if (ImGui::Button("Créer monde")) {
+          file = File(glm::vec3(height, width, length));
+          createNewWorld = false;
+        }
+      ImGui::End();
     }
   }
 
