@@ -11,7 +11,7 @@ namespace Imaker{
 
   struct cubeType {
     glm::vec3 color;
-    char* name;
+    std::string name;
 
     cubeType(){
     }
@@ -19,6 +19,12 @@ namespace Imaker{
     cubeType(glm::vec3 colors, char typeName[32]){
       color = colors;
       name = typeName;
+    }
+
+    bool operator==(const cubeType &type) const{
+      return ( (color.x == type.color.x)
+            && (color.y == type.color.y)
+            && (color.z == type.color.z));
     }
   };
 
@@ -37,8 +43,10 @@ namespace Imaker{
       void deleteCube();
       void editColor(int type);
       void editType(cubeType newType);
-      void returnPos();
       void destroy();
+      glm::vec3 returnPos();
+      bool returnVisibility();
+      cubeType returnCubeType();
 
     protected :
       GLuint m_vao;

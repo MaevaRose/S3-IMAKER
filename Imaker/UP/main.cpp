@@ -7,6 +7,7 @@
 #include <vector>
 #include <class/Cursor.hpp>
 #include <class/Interface.hpp>
+#include <Eigen/Dense>
 
 using namespace glimac;
 using namespace Imaker;
@@ -105,8 +106,9 @@ int main(int argc, char** argv) {
 
         // Event loop:
         SDL_Event e;
-        ImGui_ImplSDL2_ProcessEvent(&e);
+
         while(interface.windowManager.pollEvent(e)) {
+          ImGui_ImplSDL2_ProcessEvent(&e);
             if(e.type == SDL_QUIT) {
                 done = true; // Leave the loop after this iteration
             }
@@ -117,6 +119,7 @@ int main(int argc, char** argv) {
         interface.startFrame();
         interface.MainMenuBar(currentFile);
         interface.browserFile(currentFile);
+        interface.saveWindow();
         interface.createNewWorldWindow(currentFile);
         interface.selectionTypeCube(currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], currentFile.world);
     //Pas de sdl event si on est sur une fenêtre ImGui
@@ -208,6 +211,9 @@ int main(int argc, char** argv) {
             cursorPos = cursor.getCursorPos();
             currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
             e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_s){
+            currentFile.saveFile("../testSauvegarde1.imaker");
           }
         }
         break;

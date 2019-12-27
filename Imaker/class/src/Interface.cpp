@@ -7,6 +7,8 @@ namespace Imaker{
   const int WINDOW_WIDTH = 1000;
   bool browserIsOpen = false;
   bool createNewWorld = false;
+  bool save = false;
+  bool saveAs = false;
 
 
   void sautDeLigne(int lignes){
@@ -76,7 +78,8 @@ namespace Imaker{
     if (ImGui::TreeNode("Selection Type")){
       for (int n = 0; n < world.allCubeTypes.size(); n++)
       {
-          if (ImGui::Selectable(world.allCubeTypes[n].name, n)){
+          const char* charCubeType = world.allCubeTypes[n].name.c_str();
+          if (ImGui::Selectable(charCubeType, n)){
             cube.editType(world.allCubeTypes[n]);
           }
       }
@@ -141,18 +144,16 @@ namespace Imaker{
             if (ImGui::MenuItem("Open World", "")) {
               browserIsOpen = true;
             }
+            if (ImGui::MenuItem("Save", "")) {
+              file.saveFile(file.fileName);
+              save = true;
+            }
+            if (ImGui::MenuItem("Save As", "")) {
+              saveAs = true;
+            }
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Edit"))
-        {
-            if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
-            ImGui::Separator();
-            if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-            if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-            if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-            ImGui::EndMenu();
-        }
+
         ImGui::EndMainMenuBar();
     }
   }
@@ -205,6 +206,23 @@ void Interface::browserFile(File &file){
           file = File(glm::vec3(height, width, length));
           createNewWorld = false;
         }
+      ImGui::End();
+    }
+  }
+
+  void Interface::saveWindow(){
+    ImGui::SetNextWindowPos(ImVec2(WINDOW_HEIGHT/4, WINDOW_WIDTH/4), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(WINDOW_HEIGHT/2, WINDOW_WIDTH/2), ImGuiCond_FirstUseEver);
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
+    if (save){
+      ImGui::Begin("Fichier sauvegardé", NULL, window_flags);
+      sautDeLigne(10);
+      ImGui::SameLine(150); ImGui::Text("Fichier sauvgardé !");
+      sautDeLigne(5);
+      ImGui::SameLine(150);
+      if (ImGui::Button("Continuer")) {
+        save = false;
+      }
       ImGui::End();
     }
   }

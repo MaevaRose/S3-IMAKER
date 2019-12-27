@@ -28,6 +28,7 @@ namespace Imaker{
       void MainMenuBar(File &file);
       void browserFile(File &file);
       void createNewWorldWindow(File &file);
+      void saveWindow();
 
     public:
       glimac::SDLWindowManager windowManager;

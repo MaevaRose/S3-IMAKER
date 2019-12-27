@@ -362,27 +362,28 @@ namespace Imaker{
     else std::cout << "Aucun cube à supprimer" << std::endl;
   }
 
-  void Cube::returnPos() {
-    std::cout << "cube créé à la position " << position << std::endl;
-  }
-  //
-  // void Cube::editColor(int type) {
-  //   switch (type) {
-  //     case 0: color = glm::vec3(1,0,0);
-  //       break;
-  //     case 1: color = glm::vec3(0,1,0);
-  //       break;
-  //     case 2: color = glm::vec3(0,0,1);
-  //       break;
-  //     case 3: color = glm::vec3(0,1,1);
-  //       break;
-  //     default : ;
-  //       break;
-  //   }
-  // }
+
 
   void Cube::editType(cubeType newType){
       type = newType;
+  }
+
+
+
+  bool Cube::returnVisibility() {
+    return visible;
+  }
+
+
+
+  cubeType Cube::returnCubeType(){
+    return type;
+  }
+
+
+
+  glm::vec3 Cube::returnPos(){
+    return position;
   }
 
 } //namespace
