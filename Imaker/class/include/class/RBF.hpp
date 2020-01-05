@@ -15,12 +15,12 @@ class InterpolationFunc {
 
     //constructor
     InterpolationFunc();
-    InterpolationFunc(std::vector<glm::vec2> p, std::vector<float> u, int indiceRBF);
+    InterpolationFunc(std::vector<glm::vec2> p, VectorXd u, int indiceRBF);
 
     //Methodes
-    void calculW();
-    float calculInterpolation(int posX, int posY);
-    MatrixXd buildMatContrainte();
+    void calculW(MatrixXd contraintes);
+    float calculInterpolation(glm::vec2 x);
+    MatrixXd buildMatContrainte(int dim);
     
 
     private : 
@@ -29,5 +29,5 @@ class InterpolationFunc {
     std::vector<glm::vec2> position;
     VectorXd poids;
     int rbfAssociate;
-    std::vector<float> w;
+    VectorXd w;
 };
