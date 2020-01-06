@@ -22,6 +22,7 @@ namespace Imaker{
       void deleteCube();
       void editColor();
       void returnPos();
+      glm::vec3 getPos();
 
     protected :
       GLuint m_vao;

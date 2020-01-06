@@ -80,6 +80,15 @@ int main(int argc, char** argv) {
     Cursor cursor;
     glm::vec3 cursorPos;
 
+    //ZONE DE TEST DES FONCTIONS ////////////////////////////////////////////////////////
+    Cube cubeTest(glm::vec3(0,0,0));
+    //cubeTest.fillCube();
+    extrude(cubeTest, world);
+
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
 
 
     // Application loop:
@@ -128,6 +137,16 @@ int main(int argc, char** argv) {
           else if(e.key.keysym.sym == SDLK_v){
             cursorPos = cursor.getCursorPos();
             world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_e){
+            cursorPos = cursor.getCursorPos();
+            extrude(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], world);
+            e.type = 0;
+          }
+          else if(e.key.keysym.sym == SDLK_d){
+            cursorPos = cursor.getCursorPos();
+            dig(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], world);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_KP_6){

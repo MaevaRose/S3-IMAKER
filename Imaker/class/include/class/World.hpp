@@ -31,4 +31,8 @@ namespace Imaker{
         int ground; //POURQUOI ?
         std::vector<std::vector<std::vector<Cube>>> allCubes;  
     };
+
+    //AUTRES METHODES
+    void extrude(Cube cube, World world);
+    void dig(Cube cube, World world);
 }

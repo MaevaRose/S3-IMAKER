@@ -16,6 +16,10 @@ namespace Imaker {
         return this -> width;
     }
 
+    int World::getLength() {
+        return this -> length;
+    }
+
     void World::createScene(){
         for(int i = 0 ; i < this->width ; i++ ){
             for(int j = 0 ; j < this->length ; j++){
@@ -57,5 +61,48 @@ namespace Imaker {
 
 
     }
-}
 
+
+    void extrude(Cube cube, World world) {
+        if(!cube.isVisible()) {
+            return;
+        }
+        else {
+            int z = cube.getPos().z;
+            while(z < world.getHeight()) {
+                Cube newCube = world.allCubes[cube.getPos().x][cube.getPos().y][z+1];
+                if(!newCube.isVisible()) {
+                    newCube.fillCube();
+                    return;
+                }
+                else {
+                    z++; 
+                }
+            }
+        }
+    }
+
+    void dig(Cube cube, World world) {
+        if(!cube.isVisible()) {
+            return;
+        }
+        else {
+            int z = cube.getPos().z;
+            if(z == world.getHeight()) {
+                cube.deleteCube();
+                return;
+            }
+            while(z < world.getHeight()-1) {
+                Cube newCube = world.allCubes[cube.getPos().x][cube.getPos().y][z+1];
+                if(!newCube.isVisible()) {
+                    cube.deleteCube();
+                    return;
+                }
+                else {
+                    z++; 
+                }
+            }
+        }
+    }
+
+}

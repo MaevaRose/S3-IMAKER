@@ -21,7 +21,7 @@ find_package(Eigen3 REQUIRED)
 #set(OPENGL_LIBRARIES /usr/lib/x86_64-linux-gnu/libGL.so.1)
 
 include_directories(${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR})
-include_directories(third-party/include/imgui glimac/include class/include  third-party/include )
+include_directories( glimac/include class/include  third-party/include )
 
 
 #Librairies
@@ -29,7 +29,7 @@ include_directories(third-party/include/imgui glimac/include class/include  thir
 add_subdirectory(glimac)
 add_subdirectory(class)
 
-set(ALL_LIBRARIES glimac imgui class ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${EIGEN3_INCLUDE_DIR})
+set(ALL_LIBRARIES glimac class ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${EIGEN3_INCLUDE_DIR})
 
 file(GLOB UP_DIRECTORY "UP*")
 
