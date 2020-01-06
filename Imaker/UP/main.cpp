@@ -95,22 +95,16 @@ int main(int argc, char** argv) {
     //ZONE DE TEST DES FONCTIONS ////////////////////////////////////////////////////////
     Cube cubeTest(glm::vec3(0,0,0));
     //cubeTest.fillCube();
-    extrude(cubeTest, world);
 
     //pour déplacer le curseur pas trop vite
     int count = 0;
     int vitesse = 100;
-
-
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     // Application loop:
     bool done = false;
     while(!done) {
-
-
 
         // Event loop:
         SDL_Event e;
@@ -222,21 +216,17 @@ int main(int argc, char** argv) {
             currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
             e.type = 0;
           }
-          else if(e.key.keysym.sym == SDLK_s){
-            currentFile.saveFile("../testSauvegarde1.imaker");
+          //else if(e.key.keysym.sym == SDLK_s) currentFile.saveFile("../testSauvegarde1.imaker");
           else if(e.key.keysym.sym == SDLK_e){
             cursorPos = cursor.getCursorPos();
-            extrude(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], world);
+            currentFile.world.extrude(cursorPos);
+            //extrude(currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], currentFile.world);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_d){
             cursorPos = cursor.getCursorPos();
-            dig(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], world);
-            e.type = 0;
-          }
-          else if(e.key.keysym.sym == SDLK_y){
-            cursorPos = cursor.getCursorPos();
-            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(1);
+            currentFile.world.dig(cursorPos);
+            //dig(currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], currentFile.world);
             e.type = 0;
           }
         }

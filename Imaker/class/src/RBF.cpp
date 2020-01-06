@@ -57,8 +57,8 @@ namespace Imaker{
     }
 
     void InterpolationFunc::calculW(MatrixXd contraintes) {
-        Eigen::ColPivHouseholderQR<Eigen::MatrixXd> dec(contraintes); 
-        this->w = dec.solve(this->poids); 
+        Eigen::ColPivHouseholderQR<Eigen::MatrixXd> dec(contraintes);
+        this->w = dec.solve(this->poids);
     }
 
     float InterpolationFunc::calculInterpolation(glm::vec2 x) {
@@ -75,12 +75,11 @@ namespace Imaker{
             for(int j=0; j<Y; j++) {
                 int z = calculInterpolation(glm::vec2(i,j));
                 for(int k=0; k<z; k++) {
-                    extrude(world.allCubes[i][j][k], world);
+                    world.extrude(glm::vec3(i, j, k));
                 }
-            } 
+            }
         }
     }
 
 }
 //RBF UTILISATION_________________________________________________________________
-

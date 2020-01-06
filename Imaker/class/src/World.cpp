@@ -65,44 +65,43 @@ namespace Imaker {
     }
 
 
-    void extrude(Cube cube, World world) {
-        if(!cube.isVisible()) {
+
+    void World::extrude(glm::vec3 pos) {
+        if(!allCubes[pos.x][pos.y][pos.z].isVisible()) {
             return;
         }
         else {
-            int z = cube.getPos().z;
-            while(z < world.getHeight()) {
-                Cube newCube = world.allCubes[cube.getPos().x][cube.getPos().y][z+1];
-                if(!newCube.isVisible()) {
-                    newCube.fillCube();
+            int z = pos.z;
+            while(z < this->height) {
+                if(!allCubes[pos.x][pos.y][z+1].isVisible()) {
+                    allCubes[pos.x][pos.y][z+1].fillCube();
                     return;
                 }
                 else {
-                    z++; 
+                    z++;
                 }
             }
         }
     }
 
 
-    void dig(Cube cube, World world) {
-        if(!cube.isVisible()) {
+    void World::dig(glm::vec3 pos) {
+        if(!allCubes[pos.x][pos.y][pos.z+1].isVisible()) {
             return;
         }
         else {
-            int z = cube.getPos().z;
-            if(z == world.getHeight()) {
-                cube.deleteCube();
+            int z = pos.z+1;
+            if(z == this->height) {
+                allCubes[pos.x][pos.y][z].deleteCube();
                 return;
             }
-            while(z < world.getHeight()-1) {
-                Cube newCube = world.allCubes[cube.getPos().x][cube.getPos().y][z+1];
-                if(!newCube.isVisible()) {
-                    cube.deleteCube();
+            while(z < this->height-1) {
+                if(!allCubes[pos.x][pos.y][z+1].isVisible()) {
+                    allCubes[pos.x][pos.y][z].deleteCube();
                     return;
                 }
                 else {
-                    z++; 
+                    z++;
                 }
             }
         }

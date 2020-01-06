@@ -208,7 +208,7 @@ namespace Imaker {
                   }
 
                   //on met le tout dans le fichier
-                  glm::vec3 cubePosition = world.allCubes[i][j][k].returnPos();
+                  glm::vec3 cubePosition = world.allCubes[i][j][k].getPos();
                   file << "Cube " << cubePosition.z << " " << cubePosition.y << " " << cubePosition.x << " " << stringVisible << " " << intCubeType << " " << std::endl;
                 }
             }

@@ -426,7 +426,7 @@ namespace Imaker{
 
 
 
-  glm::vec3 Cube::returnPos(){
+  glm::vec3 Cube::getPos(){
     return position;
   }
 

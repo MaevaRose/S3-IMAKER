@@ -22,6 +22,8 @@ namespace Imaker{
         void drawScene(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc);
         void drawWorld(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc);
         void createNewCubeType(glm::vec3 color, char cubeName[32]);
+        void extrude(glm::vec3 pos);
+        void dig(glm::vec3 pos);
 
         public :
 
@@ -34,7 +36,4 @@ namespace Imaker{
         std::vector<cubeType> allCubeTypes;
     };
 
-    //AUTRES METHODES
-    void extrude(Cube cube, World world);
-    void dig(Cube cube, World world);
 }

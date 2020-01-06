@@ -45,7 +45,7 @@ namespace Imaker{
       void editColor(int type);
       void editType(cubeType newType);
       void destroy();
-      glm::vec3 returnPos();
+      glm::vec3 getPos();
       bool returnVisibility();
       cubeType returnCubeType();
 
