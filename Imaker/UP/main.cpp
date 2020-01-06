@@ -207,18 +207,16 @@ int main(int argc, char** argv) {
             world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
             e.type = 0;
           }
-            extrude(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], world);
           else if(e.key.keysym.sym == SDLK_e){
             cursorPos = cursor.getCursorPos();
+            extrude(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], world);
             e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_d){
-            dig(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], world);
             cursorPos = cursor.getCursorPos();
-          }
-          else if(e.key.keysym.sym == SDLK_KP_6){
-            cursor.updatePosX(1, world.width);
+            dig(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], world);
             e.type = 0;
+          }
           else if(e.key.keysym.sym == SDLK_y){
             cursorPos = cursor.getCursorPos();
             world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(1);

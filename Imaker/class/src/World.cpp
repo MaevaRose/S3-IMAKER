@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <../include/class/World.hpp>
+#include <class/World.hpp>
 
 namespace Imaker {
 
@@ -67,11 +67,11 @@ namespace Imaker {
 
     void extrude(Cube cube, World world) {
         if(!cube.isVisible()) {
-        }
             return;
+        }
         else {
-            while(z < world.getHeight()) {
             int z = cube.getPos().z;
+            while(z < world.getHeight()) {
                 Cube newCube = world.allCubes[cube.getPos().x][cube.getPos().y][z+1];
                 if(!newCube.isVisible()) {
                     newCube.fillCube();
@@ -80,30 +80,31 @@ namespace Imaker {
                 else {
                     z++; 
                 }
-        }
-
             }
+        }
     }
+
+
     void dig(Cube cube, World world) {
         if(!cube.isVisible()) {
+            return;
         }
         else {
-            return;
             int z = cube.getPos().z;
-                cube.deleteCube();
             if(z == world.getHeight()) {
-            }
+                cube.deleteCube();
                 return;
-                if(!newCube.isVisible()) {
+            }
             while(z < world.getHeight()-1) {
                 Cube newCube = world.allCubes[cube.getPos().x][cube.getPos().y][z+1];
+                if(!newCube.isVisible()) {
                     cube.deleteCube();
                     return;
+                }
                 else {
-                }
                     z++; 
-            }
                 }
-    }
+            }
         }
+    }
 }
