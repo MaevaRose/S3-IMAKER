@@ -1,18 +1,22 @@
 #include "class/File.hpp"
 
 namespace Imaker {
-    File::File() : world(World(25,25,25)), fileName("./NewFile.imaker") {
+
+    //Constructeur
+    File::File() : world(World(25,25,25)), fileName("../Imaker/assets/data/NewFile.imaker") {
       world.createScene();
       world.allCubeTypes.push_back(cubeType(glm::vec3(0,0,1), "Bleu"));
       world.allCubeTypes.push_back(cubeType(glm::vec3(1,1,1), "Blanc"));
     };
 
-    File::File(glm::vec3 tailleWorld) : world(World(tailleWorld.x, tailleWorld.y ,tailleWorld.z)), fileName("NewFile") {
+    //Autre constructeur
+    File::File(glm::vec3 tailleWorld) : world(World(tailleWorld.x, tailleWorld.y ,tailleWorld.z)), fileName("../Imaker/assets/data/NewFile.imaker") {
       world.createScene();
       world.allCubeTypes.push_back(cubeType(glm::vec3(0,0,1), "Bleu"));
       world.allCubeTypes.push_back(cubeType(glm::vec3(1,1,1), "Blanc"));
     }
 
+    //Ouvrir un fichier .imaker
     void File::openFile(std::string File){
       std::string ligne;
       std::string mot;
@@ -22,9 +26,11 @@ namespace Imaker {
       int x = -1, y = -1, z = -1; // positions des cubes
       std::string typeName;
 
+      //on ouvre le flux
     	std::string const openFileName(File);
     	std::ifstream file(openFileName.c_str());
 
+      //vérification avant de continuer
       if(!file){std::cout<<"Impossible d'ouvrir le fichier"<<std::endl; exit(0);}
 
       fileName = openFileName;
@@ -34,13 +40,12 @@ namespace Imaker {
       file>>mot;
       if(mot!="@IMAKER") { std::cout<<"erreur ligne 1"<<std::endl;}
 
-      // On a une ligne dédié au monde///////////////////////////////////////////////////////
+      // On a une ligne dédié au monde
       file.seekg(1, std::ios::cur);
       file>>mot;
       if(mot!="World"){ std::cout<<"erreur ligne 2"<<std::endl;}
       else {
         //on vérifie et récupère les valeurs du monde
-
         //height du monde
         file.seekg(1, std::ios::cur);
         file>>nombre;
@@ -73,7 +78,7 @@ namespace Imaker {
       if(!nbCubeType) { std::cout<<"erreur ligne 3"<<std::endl;}
       else {
         for(int i = 0 ; i < nbCubeType ; i++){
-          //on lit chaque ligne avec ses trois couleurs et son nom
+          //on lit chaque ligne avec ses trois couleurs et son nom    // Note : le nom est forcément en un seul morceau, l'utilisateur ne peut pas mettre d'espace
           file.seekg(1, std::ios::cur);
           file>>mot;
           if(mot!="Type"){ std::cout<<"erreur ligne Type"<<i<<std::endl;}
@@ -133,7 +138,7 @@ namespace Imaker {
           file.seekg(1, std::ios::cur);
           file>>z;
           if(z == -1){std::cout<<"erreur position z cube"<<i<<std::endl;exit(0);}
-          //visible or not
+          //visible or not // Note : nous avons choisi de l'indiquer sous forme de string afin d'éviter un possible mélange avec la coordonnée z ou le numéro du type
           file.seekg(1, std::ios::cur);
           file>>mot;
           if(mot == "false") { visible = false; }
@@ -145,8 +150,7 @@ namespace Imaker {
           cubeType cubetype = world.allCubeTypes[nombre];
           //on peut créer le cube
           world.allCubes[y][z][x] = Cube(glm::vec3(y,z,x), visible, cubetype);
-          //std::cout<< "cube position " << x << y << z << "visible" << visible << std::endl;
-        }//boucle for pour chaque cube
+        }//fin de la boucle for pour chaque cube
       }
       ////////////////////////////////////////////////////////////////////////////////////
       //on vérifie qu'on a atteint la fin du document/////////////////////////////////////////////
@@ -154,11 +158,13 @@ namespace Imaker {
       file.seekg(1, std::ios::cur);
       file>>mot;
       if(mot!="end") { std::cout<<"erreur ligne finale"<<std::endl;}
-    }//fin de File::File(std::string openFile)
+    }//fin de File::openFile(std::string File)
 
 
+    //destructeur
     File::~File(){}
 
+    //on vérifie si le fichier existe //implémenté pour le saveAs à l'origine
     bool File::fileExist(std::string File){
       std::string const openFileName(File);
     	std::ifstream file(openFileName.c_str());
@@ -166,6 +172,7 @@ namespace Imaker {
       else return true;
     }
 
+    //sauvegarder le fichier
     void File::saveFile(std::string File){
       std::string const saveFileName(File);
       std::ofstream file(saveFileName.c_str());
@@ -179,7 +186,7 @@ namespace Imaker {
         //cubeType
         file << world.allCubeTypes.size() << std::endl;
         for(int i = 0 ; i < world.allCubeTypes.size() ; i++){
-          file << "Type " << i << " " << world.allCubeTypes[i].color.x*255 << " " << world.allCubeTypes[i].color.y*255 << " " << world.allCubeTypes[i].color.z*255 << " " <<  world.allCubeTypes[i].name << " " << std::endl; //finir
+          file << "Type " << i << " " << int(world.allCubeTypes[i].color.x*255) << " " << int(world.allCubeTypes[i].color.y*255) << " " << int(world.allCubeTypes[i].color.z*255) << " " <<  world.allCubeTypes[i].name << " " << std::endl; //finir
         }
 
         //allCubes
@@ -209,5 +216,9 @@ namespace Imaker {
         file << "end" << std::endl;
       }//if(file)
     }//void File::saveFile()
+
+  void File::changeFileName(std::string newName) {
+    fileName = newName;
+  }
 
 } // namespace Imaker

@@ -63,6 +63,7 @@ namespace Imaker {
 
 
     void World::createNewCubeType(glm::vec3 color, char cubeName[32]){
-      allCubeTypes.push_back(cubeType(color, cubeName));
+      std::string temp_value(cubeName);
+      allCubeTypes.push_back(cubeType(color, temp_value));
     }
 }

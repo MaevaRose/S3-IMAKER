@@ -35,6 +35,40 @@ namespace cubeData {
     //     glm::vec3(0, 0,-1), glm::vec3(0, 0,-1), glm::vec3(0, 0,-1), glm::vec3(0, 0,-1)
     // };
 
+    float normals[] = {
+		// Front face
+    0.0f,  1.0f,  0.0f,
+    0.0f,  1.0f,  0.0f,
+    0.0f,  1.0f,  0.0f,
+    0.0f,  1.0f,  0.0f,
+		// Back face
+		 0.0f,  0.0f, -1.0f,
+		 0.0f,  0.0f, -1.0f,
+		 0.0f,  0.0f, -1.0f,
+		 0.0f,  0.0f, -1.0f,
+		// Top face
+    -1.0f,  0.0f,  0.0f,
+    -1.0f,  0.0f,  0.0f,
+    -1.0f,  0.0f,  0.0f,
+    -1.0f,  0.0f,  0.0f,
+		// Bot face
+    1.0f,  0.0f,  0.0f,
+    1.0f,  0.0f,  0.0f,
+    1.0f,  0.0f,  0.0f,
+    1.0f,  0.0f,  0.0f,
+		// Left face
+    0.0f,  0.0f,  1.0f,
+    0.0f,  0.0f,  1.0f,
+    0.0f,  0.0f,  1.0f,
+    0.0f,  0.0f,  1.0f,
+
+		// Right face
+     0.0f, -1.0f,  0.0f,
+		 0.0f, -1.0f,  0.0f,
+		 0.0f, -1.0f,  0.0f,
+		 0.0f, -1.0f,  0.0f,
+	};
+
     const unsigned short indices[] = {
         0, 1, 2,   2, 3, 0,       // front
         4, 5, 6,   6, 7, 4,       // right
@@ -70,7 +104,7 @@ namespace cubeData {
 
 namespace Imaker{
 
-  Cube::Cube() : visible(false), type(glm::vec3(1,1,1), "Blanc (défaut)") {
+  Cube::Cube() : visible(false), type(glm::vec3(1,1,1), "Blanc") {
 
     /*********************************
      * VBO
@@ -146,7 +180,7 @@ namespace Imaker{
   }
 
 
-  Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(false), position(vecPosition), type(glm::vec3(0,0,1), "Bleu (défaut)") {
+  Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(false), position(vecPosition), type(glm::vec3(0,0,1), "Bleu") {
     /*********************************
      * VBO
      *********************************/
@@ -160,7 +194,10 @@ namespace Imaker{
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-
+    GLuint normalsBuffer;
+    glGenBuffers(1, &normalsBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, normalsBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData::normals), cubeData::normals, GL_STATIC_DRAW);
 
     /*********************************
      * IBO
@@ -186,21 +223,21 @@ namespace Imaker{
     const GLuint VERTEX_ATTR_POSITION = 0;
     const GLuint VERTEX_ATTR_NORMAL = 1;
 
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // on binde le m_vbo
-    // Vertex input description
-
     glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // on binde le m_vbo
     glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE,
       3 * sizeof(float), 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
+    glBindBuffer(GL_ARRAY_BUFFER, normalsBuffer);
     glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE,
       3 * sizeof(float), 0);
-
-
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
     glBindVertexArray(0);
+
 
 
 
@@ -221,6 +258,12 @@ namespace Imaker{
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
+    GLuint normalsBuffer;
+    glGenBuffers(1, &normalsBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, normalsBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData::normals), cubeData::normals, GL_STATIC_DRAW);
+
+
 
     /*********************************
      * IBO
@@ -246,20 +289,19 @@ namespace Imaker{
     const GLuint VERTEX_ATTR_POSITION = 0;
     const GLuint VERTEX_ATTR_NORMAL = 1;
 
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // on binde le m_vbo
-    // Vertex input description
-
     glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // on binde le m_vbo
     glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE,
       3 * sizeof(float), 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
+    glBindBuffer(GL_ARRAY_BUFFER, normalsBuffer);
     glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE,
       3 * sizeof(float), 0);
-
-
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
     glBindVertexArray(0);
 
 
@@ -296,6 +338,8 @@ namespace Imaker{
     glBindVertexArray(0);
 
   }
+
+
 
   void Cube::drawCubeScaled(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc, int width, int length, int height){
     glBindVertexArray(m_vao);

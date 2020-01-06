@@ -16,7 +16,7 @@ namespace Imaker{
     cubeType(){
     }
 
-    cubeType(glm::vec3 colors, char typeName[32]){
+    cubeType(glm::vec3 colors, std::string typeName){
       color = colors;
       name = typeName;
     }
@@ -24,7 +24,8 @@ namespace Imaker{
     bool operator==(const cubeType &type) const{
       return ( (color.x == type.color.x)
             && (color.y == type.color.y)
-            && (color.z == type.color.z));
+            && (color.z == type.color.z)
+            && (name == type.name));
     }
   };
 

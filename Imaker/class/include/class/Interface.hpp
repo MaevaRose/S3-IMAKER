@@ -29,6 +29,8 @@ namespace Imaker{
       void browserFile(File &file);
       void createNewWorldWindow(File &file);
       void saveWindow();
+      void saveAsWindow(File &file);
+      void overwriteWindow(File &file);
 
     public:
       glimac::SDLWindowManager windowManager;

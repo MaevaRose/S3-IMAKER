@@ -7,7 +7,7 @@
 #include <vector>
 #include <class/Cursor.hpp>
 #include <class/Interface.hpp>
-#include <Eigen/Dense>
+
 
 using namespace glimac;
 using namespace Imaker;
@@ -54,8 +54,9 @@ int main(int argc, char** argv) {
      GLint uKd = glGetUniformLocation(program.getGLId(), "uKd");
      GLint uKs = glGetUniformLocation(program.getGLId(), "uKs");
      GLint uShininess = glGetUniformLocation(program.getGLId(), "uShininess");
-     GLint uLightDir = glGetUniformLocation(program.getGLId(), "uLightDir_vs");
+     GLint uLightDir = glGetUniformLocation(program.getGLId(), "uLightDir");
      GLint uLightIntensity = glGetUniformLocation(program.getGLId(), "uLightIntensity");
+     GLint uLightPos = glGetUniformLocation(program.getGLId(), "uLightPos");
 
      //empêcher que les triangles invisibles recouvrent ceux devant
      glEnable(GL_DEPTH_TEST);
@@ -120,6 +121,8 @@ int main(int argc, char** argv) {
         interface.MainMenuBar(currentFile);
         interface.browserFile(currentFile);
         interface.saveWindow();
+        interface.saveAsWindow(currentFile);
+        interface.overwriteWindow(currentFile);
         interface.createNewWorldWindow(currentFile);
         interface.selectionTypeCube(currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], currentFile.world);
     //Pas de sdl event si on est sur une fenêtre ImGui
@@ -269,11 +272,12 @@ int main(int argc, char** argv) {
         lightDir4 =  globalMVMatrix * lightDir4;
         glm::vec3 lightDir = glm::vec3(lightDir.x, lightDir.y, lightDir.z);
 
-       glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0.2, 0.2, 0.2)));
-       glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0.2, 0.2, 0.2)));
+       glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0.5)));
+       glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0.2)));
        glUniform1f(uShininess, 0.1);
-       glUniform3fv(uLightDir, 1, glm::value_ptr(glm::vec3(1.f)));
-       glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0.5,0.5,0.5)));
+       glUniform3fv(uLightDir, 1, glm::value_ptr(glm::vec3(0.5, 1.f, 0.8)));
+       glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(5000.f)));
+       glUniform3fv(uLightPos, 1, glm::value_ptr(glm::vec3(1.f)));
 
 
 

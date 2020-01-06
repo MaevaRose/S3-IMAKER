@@ -16,9 +16,9 @@ namespace Imaker{
       void createWorldFromFile();
       bool fileExist(std::string File);
       void saveFile(std::string File);
+      void changeFileName(std::string);
 
     public :
-      //glm::vec3 sizeWorld;
       World world;
       std::string fileName;
 
