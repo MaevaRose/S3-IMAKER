@@ -2,7 +2,7 @@
 
 layout(location = 0) in vec3 aVertexPosition;
 layout(location = 1) in vec3 aVertexNormal;
-layout(location = 2) in vec3 aVertexColor;
+//layout(location = 2) in vec3 aVertexColor;
 
 //matrices de transformation
 uniform mat4 uMVPMatrix;
@@ -24,8 +24,10 @@ void main() {
   //on calcule les valeurs de sortie
   vPosition_vs = vec3(uMVMatrix * vertexPosition);
   vNormal_vs = vec3(uNormalMatrix * vertexNormal);
+
   //vColor_vs = vec3(uMVMatrix * vertexColor); // effet iridescent stylé
   //vColor_vs = aVertexColor;
+  
   vColor_vs = cubeColor;
 
   gl_Position = uMVPMatrix * vertexPosition;

@@ -21,6 +21,7 @@ namespace Imaker{
         void createScene();
         void drawScene(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc);
         void drawWorld(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc);
+        void createNewCubeType(glm::vec3 color, char cubeName[32]);
 
         public :
 

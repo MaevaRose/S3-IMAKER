@@ -30,7 +30,7 @@ namespace Imaker{
 
 
     Cursor::Cursor(){
-      position = glm::vec3(2,2,2);
+      position = glm::vec3(0,0,0);
     }
 
     Cursor::~Cursor(){

@@ -6,8 +6,8 @@
 #include <iostream>
 #include <vector>
 #include <class/Cursor.hpp>
-#include <class/World.hpp>
 #include <class/Interface.hpp>
+
 
 using namespace glimac;
 using namespace Imaker;
@@ -54,8 +54,9 @@ int main(int argc, char** argv) {
      GLint uKd = glGetUniformLocation(program.getGLId(), "uKd");
      GLint uKs = glGetUniformLocation(program.getGLId(), "uKs");
      GLint uShininess = glGetUniformLocation(program.getGLId(), "uShininess");
-     GLint uLightDir = glGetUniformLocation(program.getGLId(), "uLightDir_vs");
+     GLint uLightDir = glGetUniformLocation(program.getGLId(), "uLightDir");
      GLint uLightIntensity = glGetUniformLocation(program.getGLId(), "uLightIntensity");
+     GLint uLightPos = glGetUniformLocation(program.getGLId(), "uLightPos");
 
      //empêcher que les triangles invisibles recouvrent ceux devant
      glEnable(GL_DEPTH_TEST);
@@ -76,15 +77,16 @@ int main(int argc, char** argv) {
      NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
 
-    //Création world
-    World world(20, 20, 20);
-
-    //déclaration du cube
+    //Création currentFile.world
+    //World world(25, 25, 25);
+    //File currentFile("/home/maeva/Documents/PROJET_S3/S3-IMAKER/Imaker/assets/data/save1.imaker");
+    File currentFile;    //déclaration du cube
     //Cube cube;
-    Cube cube2(glm::vec3(20, 20, 20));
+    //Cube cube2(glm::vec3(20, 20, 20));
     //std::vector<std::vector<std::vector<Cube>>> allCubes(5,std::vector<std::vector<Cube> >(5,std::vector <Cube>(5)));
-    world.createScene();
-    world.allCubeTypes.push_back(glm::vec3(0,1,0));
+    //currentFile.world.createScene();
+    //currentFile.world.allCubeTypes.push_back(cubeType(glm::vec3(0,0,1), "Bleu (défaut)"));
+    //currentFile.world.allCubeTypes.push_back(cubeType(glm::vec3(1,1,1), "Blanc (défaut)"));
     Cursor cursor;
     glm::vec3 cursorPos;
 
@@ -107,14 +109,29 @@ int main(int argc, char** argv) {
     // Application loop:
     bool done = false;
     while(!done) {
+
+
+
         // Event loop:
         SDL_Event e;
+
         while(interface.windowManager.pollEvent(e)) {
+          ImGui_ImplSDL2_ProcessEvent(&e);
             if(e.type == SDL_QUIT) {
                 done = true; // Leave the loop after this iteration
             }
 
         }
+
+        cursorPos = cursor.getCursorPos();
+        interface.startFrame();
+        interface.MainMenuBar(currentFile);
+        interface.browserFile(currentFile);
+        interface.saveWindow();
+        interface.saveAsWindow(currentFile);
+        interface.overwriteWindow(currentFile);
+        interface.createNewWorldWindow(currentFile);
+        interface.selectionTypeCube(currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], currentFile.world);
     //Pas de sdl event si on est sur une fenêtre ImGui
     interface.io = ImGui::GetIO();
     if(interface.io.WantCaptureMouse){
@@ -135,13 +152,11 @@ int main(int argc, char** argv) {
        case SDL_KEYDOWN:
          {
            float zoom = 0.1f;
-           if (e.key.keysym.sym == SDLK_z
-               || e.key.keysym.sym == SDLK_UP) {
+           if (e.key.keysym.sym == SDLK_UP) {
              //std::cout << "Z or UP pressed" << std::endl;
              camera.moveFront(-zoom);
            }
-           else if (e.key.keysym.sym == SDLK_s
-                      || e.key.keysym.sym == SDLK_DOWN) {
+           else if (e.key.keysym.sym == SDLK_DOWN) {
              //std::cout << "S or DOWN pressed" << std::endl;
              camera.moveFront(zoom);
            }
@@ -150,42 +165,42 @@ int main(int argc, char** argv) {
            else if(e.key.keysym.sym == SDLK_KP_6){
              count++;
              if(count == vitesse){
-               cursor.updatePosX(1, world.width);
+               cursor.updatePosX(1, currentFile.world.width);
                count = 0;
              }
            }
            else if(e.key.keysym.sym == SDLK_KP_4){
              count++;
              if(count == vitesse){
-               cursor.updatePosX(-1, world.width);
+               cursor.updatePosX(-1, currentFile.world.width);
                count = 0;
              }
            }
            else if(e.key.keysym.sym == SDLK_KP_8){
              count++;
              if(count == vitesse){
-               cursor.updatePosY(1, world.length);
+               cursor.updatePosY(1, currentFile.world.length);
                count = 0;
              }
            }
            else if(e.key.keysym.sym == SDLK_KP_2){
              count++;
              if(count == vitesse){
-               cursor.updatePosY(-1, world.length);
+               cursor.updatePosY(-1, currentFile.world.length);
                count = 0;
              }
            }
            else if(e.key.keysym.sym == SDLK_KP_9){
              count++;
              if(count == vitesse){
-               cursor.updatePosZ(1, world.height);
+               cursor.updatePosZ(1, currentFile.world.height);
                count = 0;
              }
            }
            else if(e.key.keysym.sym == SDLK_KP_1){
              count++;
              if(count == vitesse){
-               cursor.updatePosZ(-1, world.height);
+               cursor.updatePosZ(-1, currentFile.world.height);
                count = 0;
              }
            }
@@ -199,14 +214,16 @@ int main(int argc, char** argv) {
 
           if(e.key.keysym.sym == SDLK_c){
            cursorPos = cursor.getCursorPos();
-           world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].fillCube();
+           currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].fillCube();
            e.type = 0;
           }
           else if(e.key.keysym.sym == SDLK_v){
             cursorPos = cursor.getCursorPos();
-            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
+            currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
             e.type = 0;
           }
+          else if(e.key.keysym.sym == SDLK_s){
+            currentFile.saveFile("../testSauvegarde1.imaker");
           else if(e.key.keysym.sym == SDLK_e){
             cursorPos = cursor.getCursorPos();
             extrude(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], world);
@@ -220,21 +237,6 @@ int main(int argc, char** argv) {
           else if(e.key.keysym.sym == SDLK_y){
             cursorPos = cursor.getCursorPos();
             world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(1);
-            e.type = 0;
-          }
-          else if(e.key.keysym.sym == SDLK_u){
-            cursorPos = cursor.getCursorPos();
-            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(2);
-            e.type = 0;
-          }
-          else if(e.key.keysym.sym == SDLK_i){
-            cursorPos = cursor.getCursorPos();
-            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(3);
-            e.type = 0;
-          }
-          else if(e.key.keysym.sym == SDLK_o){
-            cursorPos = cursor.getCursorPos();
-            world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].editColor(4);
             e.type = 0;
           }
         }
@@ -279,25 +281,26 @@ int main(int argc, char** argv) {
      }
    }//interface hovered or not
 
-        cursorPos = cursor.getCursorPos();
+
         //std::cout<<interface.io.WantCaptureMouse<<std::endl;
         /*********************************
          * RENDERING CODE
          *********************************/
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        globalMVMatrix = camera.getViewMatrix(world);
+        globalMVMatrix = camera.getViewMatrix(currentFile.world);
 
         glm::vec4 lightDir4 =  glm::vec4(1.0f, 1.0f, 1.0f, 0.0f);
         lightDir4 =  globalMVMatrix * lightDir4;
         glm::vec3 lightDir = glm::vec3(lightDir.x, lightDir.y, lightDir.z);
 
-       glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0.2, 0.2, 0.2)));
-       glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0.2, 0.2, 0.2)));
+       glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0.5)));
+       glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0.2)));
        glUniform1f(uShininess, 0.1);
-       glUniform3fv(uLightDir, 1, glm::value_ptr(glm::vec3(1.f)));
-       glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0.5,0.5,0.5)));
+       glUniform3fv(uLightDir, 1, glm::value_ptr(glm::vec3(0.5, 1.f, 0.8)));
+       glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(5000.f)));
+       glUniform3fv(uLightPos, 1, glm::value_ptr(glm::vec3(1.f)));
 
-       interface.startFrame();
+
 
 
         glDepthRange(0, 0.01);
@@ -310,11 +313,11 @@ int main(int argc, char** argv) {
         // reserve 99% of the back depth range for the 3D axis
         glDepthRange(0.01, 1.0);
 
-        world.drawScene(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
-        world.drawWorld(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
+        currentFile.world.drawScene(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
+        currentFile.world.drawWorld(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
           // restore depth range
           glDepthRange(0, 1.0);
-          interface.selectionTypeCube(world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], world);
+
           interface.posCamera(camera);
 
           interface.render();
@@ -324,7 +327,7 @@ int main(int argc, char** argv) {
         interface.windowManager.swapBuffers();
     }
 
-    destroyWorld(world, cursor);
+    destroyWorld(currentFile.world, cursor);
 
     return EXIT_SUCCESS;
 }

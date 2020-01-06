@@ -1,1 +1,5 @@
 Imaker-build
+
+*.imaker
+
+Imaker/third-party/include/imgui.zip

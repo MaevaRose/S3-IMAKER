@@ -11,14 +11,21 @@ namespace Imaker{
 
   struct cubeType {
     glm::vec3 color;
-    //string name;
+    std::string name;
 
     cubeType(){
-
     }
 
-    cubeType(glm::vec3 colors){
+    cubeType(glm::vec3 colors, std::string typeName){
       color = colors;
+      name = typeName;
+    }
+
+    bool operator==(const cubeType &type) const{
+      return ( (color.x == type.color.x)
+            && (color.y == type.color.y)
+            && (color.z == type.color.z)
+            && (name == type.name));
     }
   };
 
@@ -26,6 +33,7 @@ namespace Imaker{
     public :
       Cube();
       Cube(glm::vec3 vecPosition);
+      Cube(glm::vec3 vecPosition, bool visibility, cubeType cubetype);
       ~Cube();
 
       void drawCubeScaled(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc, int width, int length, int height);
@@ -36,9 +44,10 @@ namespace Imaker{
       void deleteCube();
       void editColor(int type);
       void editType(cubeType newType);
-      void returnPos();
-      glm::vec3 getPos();
       void destroy();
+      glm::vec3 returnPos();
+      bool returnVisibility();
+      cubeType returnCubeType();
 
     protected :
       GLuint m_vao;
@@ -46,7 +55,7 @@ namespace Imaker{
       GLuint m_vbo;
 
       glm::vec3 position;
-      glm::vec3 color;
+      //glm::vec3 color;
       cubeType type;
       bool visible;
 

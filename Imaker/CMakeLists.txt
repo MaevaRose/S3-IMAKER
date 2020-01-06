@@ -33,4 +33,5 @@ set(ALL_LIBRARIES glimac imgui class ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLE
 
 file(GLOB UP_DIRECTORY "UP*")
 
+
 add_subdirectory(UP)

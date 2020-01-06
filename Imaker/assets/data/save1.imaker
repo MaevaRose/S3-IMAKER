@@ -1,0 +1,29 @@
+@IMAKER
+World 5 2 2
+4
+Type 0 0 0 255 Bleu 
+Type 1 255 255 255 Blanc 
+Type 2 255 0 0 Rouge 
+Type 3 0 255 0 Vert 
+20
+Cube 0 0 0 true 0 
+Cube 1 0 0 true 1 
+Cube 2 0 0 true 3 
+Cube 3 0 0 true 0 
+Cube 4 0 0 true 1 
+Cube 0 1 0 false 0 
+Cube 1 1 0 false 0 
+Cube 2 1 0 false 0 
+Cube 3 1 0 false 0 
+Cube 4 1 0 false 0 
+Cube 0 1 1 false 0 
+Cube 1 1 1 true 2 
+Cube 2 1 1 false 0 
+Cube 3 1 1 false 0 
+Cube 4 1 1 false 0 
+Cube 0 0 1 false 0 
+Cube 1 0 1 true 2 
+Cube 2 0 1 false 0 
+Cube 3 0 1 false 0 
+Cube 4 0 1 false 0 
+end

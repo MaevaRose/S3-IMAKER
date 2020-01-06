@@ -22,7 +22,7 @@ namespace Imaker {
     }
 
     void World::createScene(){
-        color = glm::vec3(1,1,1);
+        type = cubeType(glm::vec3(1,1,1), "Blanc");
         for(int i = 0 ; i < this->width ; i++ ){
             for(int j = 0 ; j < this->length ; j++){
                 for(int k=0; k<3; k++) {
@@ -106,5 +106,12 @@ namespace Imaker {
                 }
             }
         }
+    }
+
+
+
+    void World::createNewCubeType(glm::vec3 color, char cubeName[32]){
+      std::string temp_value(cubeName);
+      allCubeTypes.push_back(cubeType(color, temp_value));
     }
 }
