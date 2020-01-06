@@ -274,4 +274,8 @@ namespace Imaker{
     std::cout << "cube créé à la position " << position << std::endl;
   }
 
+  glm::vec3 Cube::getPos() {
+    return this->position;
+  }
+
 } //namespace
