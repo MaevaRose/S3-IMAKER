@@ -5,12 +5,11 @@
 #include <iostream>
 #include "class/Cursor.hpp"
 
-#include "glimac/common.hpp"
+
 
 using namespace glimac;
 
 namespace cursorData {
-  const glm::vec3 cursorColor(1,0,0);
 
   //calcul ProjMatrix
   glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), //angle vertical de vue
@@ -32,22 +31,12 @@ namespace Imaker{
 
     Cursor::Cursor(){
       position = glm::vec3(2,2,2);
-      //glGenVertexArrays(1, &m_vao);
-      glBindVertexArray(m_vao);
-
-      const GLuint VERTEX_ATTR_COLOR = 2;
-
-      glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // on binde le vbo
-      // Vertex input description
-
-      glEnableVertexAttribArray(VERTEX_ATTR_COLOR);
-      glVertexAttribPointer(VERTEX_ATTR_COLOR, 3, GL_FLOAT, GL_FALSE,
-        3 * sizeof(float), 0);
-
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
-      glBindVertexArray(0);
     }
 
+    Cursor::~Cursor(){
+      glDeleteBuffers(1, &m_vbo);
+      glDeleteVertexArrays(1, &m_vao);
+    }
 
 
     glm::vec3 Cursor::getCursorPos(){
@@ -57,7 +46,6 @@ namespace Imaker{
 
 
     void Cursor::updatePosX(int direction, int width){
-      std::cout<<"updatePosX"<<std::endl;
       position.x += direction;
       if(position.x < 0){
         position.x = 0;
@@ -77,7 +65,6 @@ namespace Imaker{
       if(position.y > length-1) {
         position.y --;
       }
-      std::cout << "pos y = " << position.y << std::endl;
     }
 
 
@@ -92,12 +79,12 @@ namespace Imaker{
       }
     }
 
-  void Cursor::drawCursor(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc) {
+  void Cursor::drawCursor(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc) {
           //Wireframe mode on
           glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
           //dessin
-          drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc);
+          drawCube(globalMVMatrix, uMVPMatrixLoc, uMVMatrixLoc, uNormalMatrixLoc, cubeColorLoc);
 
           //WireframeM mode off
           glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

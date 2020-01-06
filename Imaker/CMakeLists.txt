@@ -30,8 +30,8 @@ add_subdirectory(glimac)
 add_subdirectory(class)
 
 set(ALL_LIBRARIES glimac class ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${EIGEN3_INCLUDE_DIR})
-
 file(GLOB UP_DIRECTORY "UP*")
+
 
 
 add_subdirectory(UP)
