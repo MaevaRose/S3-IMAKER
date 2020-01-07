@@ -23,7 +23,10 @@ namespace Imaker{
 
         //Methodes
         void setPoids(std::vector<double> poids);
-        float RBF(int i, int j);
+
+        template<typename T>
+        float RBF(const T &i, const T &j);
+
         void addContrainte(int x, int y, int z);
         MatrixXd buildMatContrainte();
         void calculW(MatrixXd contraintes);
@@ -47,5 +50,36 @@ namespace Imaker{
     float rbfInverseMultiQuad(float dist, float alpha);
     float rbfGauss(float dist, float alpha);
 
+
+
+    template<typename T>
+    float InterpolationFunc::RBF(const T &u, const T &v) {
+        float dist = glm::length(u - v);
+        switch(this->rbfAssociate) {
+            case 1: 
+                return rbfLineaire(dist, this->alpha);
+            break;
+
+            case 2: 
+                return rbfMultiQuad(dist, this->alpha);
+            break;
+
+            case 3: 
+                return rbfInverseQuad(dist, this->alpha);
+            break;
+
+            case 4: 
+                return rbfInverseMultiQuad(dist, this->alpha);
+            break;
+
+            case 5: 
+                return rbfGauss(dist, this->alpha);
+            break;
+
+            default : 
+            break;
+
+        }
+    }
     
 }

@@ -32,7 +32,7 @@ namespace Imaker{
 
     //INTERPOLATION FUNC CLASS_______________________________________________________
 
-    InterpolationFunc::InterpolationFunc() : rbfAssociate(1), alpha(-1) {};
+    InterpolationFunc::InterpolationFunc() : rbfAssociate(2), alpha(-1) {};
     InterpolationFunc::InterpolationFunc(std::vector<glm::vec2> pos, std::vector<double> u, int indiceRBF, float coeff) : position(pos), poids(u), rbfAssociate(indiceRBF), alpha(coeff) {};
 
 
@@ -45,41 +45,42 @@ namespace Imaker{
         this->poids.push_back(z);
     }
 
-    float InterpolationFunc::RBF(int i, int j) {
-        float dist = glm::length(this->position[i] - this->position[j]);
-        switch(this->rbfAssociate) {
-            case 1: 
-                return rbfLineaire(dist, this->alpha);
-            break;
+    // template<typename T>
+    // float InterpolationFunc::RBF(const T &i, const T &j) {
+    //     float dist = glm::length(this->position[i] - this->position[j]);
+    //     switch(this->rbfAssociate) {
+    //         case 1: 
+    //             return rbfLineaire(dist, this->alpha);
+    //         break;
 
-            case 2: 
-                return rbfMultiQuad(dist, this->alpha);
-            break;
+    //         case 2: 
+    //             return rbfMultiQuad(dist, this->alpha);
+    //         break;
 
-            case 3: 
-                return rbfInverseQuad(dist, this->alpha);
-            break;
+    //         case 3: 
+    //             return rbfInverseQuad(dist, this->alpha);
+    //         break;
 
-            case 4: 
-                return rbfInverseMultiQuad(dist, this->alpha);
-            break;
+    //         case 4: 
+    //             return rbfInverseMultiQuad(dist, this->alpha);
+    //         break;
 
-            case 5: 
-                return rbfGauss(dist, this->alpha);
-            break;
+    //         case 5: 
+    //             return rbfGauss(dist, this->alpha);
+    //         break;
 
-            default : 
-            break;
+    //         default : 
+    //         break;
 
-        }
-    }
+    //     }
+    // }
 
     MatrixXd InterpolationFunc::buildMatContrainte() {
         int dim = this->poids.size();
         MatrixXd contraintes(dim, dim);
         for(int i=0; i<dim; i++) {
             for(int j=0; j<dim; j++) {
-                contraintes(i, j) = RBF(i, j);
+                contraintes(i, j) = RBF(this->position[i], this->position[j]);
             }
         }
         return contraintes;
@@ -100,7 +101,8 @@ namespace Imaker{
     float InterpolationFunc::calculInterpolation(glm::vec2 point) {
         float somme = 0;
         for(int i=0; i<this->poids.size(); i++) {
-            somme += this->w[i] * rbfLineaire(glm::length(point - this->position[i]), this->alpha);
+            //float rbf = RBF()
+            somme += this->w[i] * RBF(point, this->position[i]);
         }
         return somme;
     }
