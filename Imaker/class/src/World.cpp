@@ -95,7 +95,7 @@ namespace Imaker {
                 allCubes[pos.x][pos.y][z].deleteCube();
                 return;
             }
-            while(z < this->height-1) {
+            while(z < this->height) {
                 if(!allCubes[pos.x][pos.y][z+1].isVisible()) {
                     allCubes[pos.x][pos.y][z].deleteCube();
                     allCubes[pos.x][pos.y][z].editType(allCubes[pos.x][pos.y][pos.z].returnCubeType());
