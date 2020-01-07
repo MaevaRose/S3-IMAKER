@@ -5,8 +5,8 @@
 namespace Imaker {
 
 
-    World::World() : height(100), width(100), length(100),  ground(0), allCubes(100,std::vector<std::vector<Cube>>(100,std::vector <Cube>(100) ) ) {};
-    World::World(int hei, int wid, int len) : height(hei), width(wid), length(len), ground(0),  allCubes(wid,std::vector<std::vector<Cube>>(len,std::vector <Cube>(hei) ) ) {};
+    World::World() : height(100), width(100), length(100), allCubes(100,std::vector<std::vector<Cube>>(100,std::vector <Cube>(100) ) ) {};
+    World::World(int hei, int wid, int len) : height(hei), width(wid), length(len), allCubes(wid,std::vector<std::vector<Cube>>(len,std::vector <Cube>(hei) ) ) {};
 
 
     int World::getHeight() {
@@ -21,6 +21,7 @@ namespace Imaker {
         return this -> length;
     }
 
+    //construction de tous les cubes à partir de la taille donné au world
     void World::createScene(){
         type = cubeType(glm::vec3(1,1,1), "Blanc");
         for(int i = 0 ; i < this->width ; i++ ){
@@ -75,6 +76,7 @@ namespace Imaker {
             while(z < this->height) {
                 if(!allCubes[pos.x][pos.y][z+1].isVisible()) {
                     allCubes[pos.x][pos.y][z+1].fillCube();
+                    allCubes[pos.x][pos.y][z+1].editType(allCubes[pos.x][pos.y][pos.z].returnCubeType());
                     return;
                 }
                 else {
@@ -98,6 +100,7 @@ namespace Imaker {
             while(z < this->height-1) {
                 if(!allCubes[pos.x][pos.y][z+1].isVisible()) {
                     allCubes[pos.x][pos.y][z].deleteCube();
+                    allCubes[pos.x][pos.y][z].editType(allCubes[pos.x][pos.y][pos.z].returnCubeType());
                     return;
                 }
                 else {

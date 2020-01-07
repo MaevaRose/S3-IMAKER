@@ -25,7 +25,7 @@ namespace glimac {
       glm::mat4 VM = glm::translate(ViewMatrix, glm::vec3(0.f, 0.f, -m_fDistance)); // Translation
       VM = glm::rotate(VM, glm::radians(m_fAngleX), glm::vec3(1.f, 0.f, 0.f)); // Translation * Rotation
       VM = glm::rotate(VM, glm::radians(m_fAngleZ), glm::vec3(0.f, 0.f, 1.f)); // Translation * Rotation * rotation
-      VM = glm::translate(VM, glm::vec3(float(-world.width), float(-world.height), float(-world.length))); // pour centrer la caméra sur la scène
+      VM = glm::translate(VM, glm::vec3(float(-world.getWidth()), float(-world.getHeight()), float(-world.getLength()))); // pour centrer la caméra sur la scène
       return VM;
     }
 

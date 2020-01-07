@@ -26,15 +26,6 @@ namespace cubeData {
         glm::vec3(2, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 2, 0), glm::vec3(2, 2, 0)
     };
 
-    // const glm::vec3 normals[] = {
-    //     glm::vec3(0, 0, 1), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1),
-    //     glm::vec3(1, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0),
-    //     glm::vec3(0, 1, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0),
-    //     glm::vec3(-1, 0, 0), glm::vec3(-1, 0, 0), glm::vec3(-1, 0, 0), glm::vec3(-1, 0, 0),
-    //     glm::vec3(0,-1, 0), glm::vec3(0,-1, 0), glm::vec3(0,-1, 0), glm::vec3(0,-1, 0),
-    //     glm::vec3(0, 0,-1), glm::vec3(0, 0,-1), glm::vec3(0, 0,-1), glm::vec3(0, 0,-1)
-    // };
-
     float normals[] = {
 		// Front face
     0.0f,  1.0f,  0.0f,
@@ -104,6 +95,7 @@ namespace cubeData {
 
 namespace Imaker{
 
+  //constructeur 1
   Cube::Cube() : visible(false), type(glm::vec3(1,1,1), "Blanc") {
 
     /*********************************
@@ -180,6 +172,7 @@ namespace Imaker{
   }
 
 
+  //constructeur 2
   Cube::Cube(glm::vec3 vecPosition) :  m_vao(0), m_ibo(0), visible(false), position(vecPosition), type(glm::vec3(0,0,1), "Bleu") {
     /*********************************
      * VBO
@@ -243,6 +236,8 @@ namespace Imaker{
 
   }
 
+
+  //constructeur 3
   Cube::Cube(glm::vec3 vecPosition, bool visibility, cubeType cubetype) : m_vao(0), m_ibo(0), visible(visibility), position(vecPosition), type(cubetype){
     /*********************************
      * VBO
@@ -257,12 +252,10 @@ namespace Imaker{
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-
     GLuint normalsBuffer;
     glGenBuffers(1, &normalsBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, normalsBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData::normals), cubeData::normals, GL_STATIC_DRAW);
-
 
 
     /*********************************
@@ -301,24 +294,22 @@ namespace Imaker{
       3 * sizeof(float), 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-
     glBindVertexArray(0);
-
 
 
   }
 
 
 
+  //destructeur
   Cube::~Cube() {
-
   }
 
   void Cube::destroy(){
     glDeleteBuffers(1, &m_vbo);
+    glDeleteBuffers(1, &m_ibo);
     glDeleteVertexArrays(1, &m_vao);
   }
-
 
 
   void Cube::drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc){
@@ -360,34 +351,9 @@ namespace Imaker{
 }
 
 
-
-
-
-
-
-  void Cube::drawCubeRotative(float time, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc){
-    glm::mat4 MVMatrix = glm::rotate(cubeData::MVMatrix, time, glm::vec3(0.f, 1.f, 0.f));
-
-    glBindVertexArray(m_vao);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
-
-    glUniformMatrix4fv(uMVMatrixLoc, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-    glUniformMatrix4fv(uMVPMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::ProjMatrix * MVMatrix));
-    glUniformMatrix4fv(uNormalMatrixLoc, 1, GL_FALSE, glm::value_ptr(cubeData::NormalMatrix));
-
-
-    glDrawElements(GL_TRIANGLES, sizeof(cubeData::indices), GL_UNSIGNED_SHORT, (void*) 0);
-
-    glBindVertexArray(0);
-  }
-
-
-
   bool Cube::isVisible(){
     return visible;
   }
-
 
 
   void Cube::fillCube(){
@@ -411,13 +377,6 @@ namespace Imaker{
   void Cube::editType(cubeType newType){
       type = newType;
   }
-
-
-
-  bool Cube::returnVisibility() {
-    return visible;
-  }
-
 
 
   cubeType Cube::returnCubeType(){

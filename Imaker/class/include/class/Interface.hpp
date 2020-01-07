@@ -24,13 +24,14 @@ namespace Imaker{
       void render();
       void swapBuffers();
       void selectionTypeCube(Cube &cube, World &world);
-      void posCamera(TrackBallCamera &camera);
+      void posCamera(TrackBallCamera &camera, int &luminosity);
       void MainMenuBar(File &file);
       void browserFile(File &file);
-      void createNewWorldWindow(File &file);
+      void createNewWorldWindow(File &file, Cursor &cursor);
       void saveWindow();
       void saveAsWindow(File &file);
       void overwriteWindow(File &file);
+      void draw(TrackBallCamera &camera, File &currentFile, Cursor &cursor, int &luminosity);
 
     public:
       glimac::SDLWindowManager windowManager;

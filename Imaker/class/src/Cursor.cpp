@@ -79,6 +79,12 @@ namespace Imaker{
       }
     }
 
+    void Cursor::resetPos(){
+      position.x = 0;
+      position.y = 0;
+      position.z = 0;
+    }
+
   void Cursor::drawCursor(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc) {
           //Wireframe mode on
           glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

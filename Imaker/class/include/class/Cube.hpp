@@ -30,7 +30,9 @@ namespace Imaker{
   };
 
   class Cube {
+
     public :
+      // constructeurs et destructeur
       Cube();
       Cube(glm::vec3 vecPosition);
       Cube(glm::vec3 vecPosition, bool visibility, cubeType cubetype);
@@ -38,7 +40,6 @@ namespace Imaker{
 
       void drawCubeScaled(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc, int width, int length, int height);
       void drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc); // afficher un cube avec TrackBallCamera
-      void drawCubeRotative(float time, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc);
       bool isVisible();
       void fillCube();
       void deleteCube();
@@ -46,8 +47,8 @@ namespace Imaker{
       void editType(cubeType newType);
       void destroy();
       glm::vec3 getPos();
-      bool returnVisibility();
       cubeType returnCubeType();
+
 
     protected :
       GLuint m_vao;
@@ -55,7 +56,6 @@ namespace Imaker{
       GLuint m_vbo;
 
       glm::vec3 position;
-      //glm::vec3 color;
       cubeType type;
       bool visible;
 

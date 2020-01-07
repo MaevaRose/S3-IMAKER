@@ -181,7 +181,7 @@ namespace Imaker {
         file << "@IMAKER" << std::endl;
 
         //World
-        file << "World " << world.height << " " << world.width << " " << world.length << " " << std::endl;
+        file << "World " << world.getHeight() << " " << world.getWidth() << " " << world.getLength() << " " << std::endl;
 
         //cubeType
         file << world.allCubeTypes.size() << std::endl;
@@ -190,15 +190,15 @@ namespace Imaker {
         }
 
         //allCubes
-        int nbCubes = world.height * world.width * world.length ;
+        int nbCubes = world.getHeight() * world.getWidth() * world.getLength() ;
         file << nbCubes << std::endl;
         //boucle pour parcourir le vector à trois dimensions
-        for(int i = 0 ; i < world.width ; i++ ){
-            for(int j = 0 ; j < world.length ; j++){
-                for(int k = 0 ; k < world.height ; k++){
+        for(int i = 0 ; i < world.getWidth() ; i++ ){
+            for(int j = 0 ; j < world.getLength() ; j++){
+                for(int k = 0 ; k < world.getHeight() ; k++){
                   //on vérifie les valeurs de visible et de type qui sont stockées différemment
                   std::string stringVisible;
-                  if(world.allCubes[i][j][k].returnVisibility()) stringVisible = "true";
+                  if(world.allCubes[i][j][k].isVisible()) stringVisible = "true";
                   else stringVisible = "false";
 
                   int intCubeType;
@@ -216,6 +216,12 @@ namespace Imaker {
         file << "end" << std::endl;
       }//if(file)
     }//void File::saveFile()
+
+
+  std::string File::getFileName() {
+    return fileName;
+  }
+
 
   void File::changeFileName(std::string newName) {
     fileName = newName;

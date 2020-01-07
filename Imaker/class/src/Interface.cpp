@@ -111,7 +111,7 @@ namespace Imaker{
 
 
   //fenêtre de positions par défaut pour la caméra
-  void Interface::posCamera(TrackBallCamera &camera){
+  void Interface::posCamera(TrackBallCamera &camera, int &luminosity){
     ImGui::Begin("Camera");
     ImGui::Text("m_fAngleX: %f", camera.m_fAngleX);
     ImGui::Text("m_fAngleZ: %f", camera.m_fAngleZ);
@@ -140,6 +140,7 @@ namespace Imaker{
     if (ImGui::Button("Bottom")) {
       camera.posBottom();
     }
+    ImGui::SliderInt("Luminosité", &luminosity, 0, 10000);
     ImGui::End();
   }
 
@@ -159,7 +160,7 @@ namespace Imaker{
               browserIsOpen = true;
             }
             if (ImGui::MenuItem("Save", "")) {
-              file.saveFile(file.fileName);
+              file.saveFile(file.getFileName());
               save = true;
               saveAs = false;
             }
@@ -200,7 +201,7 @@ namespace Imaker{
 
 
   //créer un nouveau monde avec les valeurs de notre choix
-  void Interface::createNewWorldWindow(File &file){
+  void Interface::createNewWorldWindow(File &file, Cursor &cursor){
     ImGui::SetNextWindowPos(ImVec2(WINDOW_HEIGHT/4, WINDOW_WIDTH/4), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(WINDOW_HEIGHT/2, WINDOW_WIDTH/2), ImGuiCond_FirstUseEver);
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
@@ -224,6 +225,7 @@ namespace Imaker{
         if (ImGui::Button("Créer monde")) {
           file = File(glm::vec3(height, width, length));
           createNewWorld = false;
+          cursor.resetPos();
         }
       ImGui::End();
     }
@@ -249,6 +251,7 @@ namespace Imaker{
     }
   }
 
+  // fenêtre pop up pour s'assurer que l'utilisateur est conscient qu'il écrase un fichier
   void Interface::overwriteWindow(File &file){
     ImGui::SetNextWindowPos(ImVec2(WINDOW_HEIGHT/4, WINDOW_WIDTH/4), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(WINDOW_HEIGHT/2, WINDOW_WIDTH/2), ImGuiCond_FirstUseEver);
@@ -261,7 +264,7 @@ namespace Imaker{
       sautDeLigne(5);
       ImGui::SameLine(150);
       if (ImGui::Button("Continuer")) {
-        file.saveFile(file.fileName);
+        file.saveFile(file.getFileName());
         save = true;
         overwrite = false;
         saveAs = false;
@@ -311,7 +314,20 @@ namespace Imaker{
     }
   }
 
-
+  //dessin de l'Interface
+  void Interface::draw(TrackBallCamera &camera, File &currentFile, Cursor &cursor, int &luminosity){
+    glm::vec3 cursorPos = cursor.getCursorPos();
+    startFrame();
+    //toutes les fenêtres
+    posCamera(camera, luminosity);
+    MainMenuBar(currentFile);
+    browserFile(currentFile);
+    saveWindow();
+    saveAsWindow(currentFile);
+    overwriteWindow(currentFile);
+    createNewWorldWindow(currentFile, cursor);
+    selectionTypeCube(currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], currentFile.world);
+  }
 
   //rendu de l'interface
   void Interface::render(){

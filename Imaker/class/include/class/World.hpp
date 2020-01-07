@@ -25,15 +25,15 @@ namespace Imaker{
         void extrude(glm::vec3 pos);
         void dig(glm::vec3 pos);
 
-        public :
-
         //attributs
-        int height;
-        int width;
-        int length;
-        int ground; //POURQUOI ?
+        public :
         std::vector<std::vector<std::vector<Cube>>> allCubes;
         std::vector<cubeType> allCubeTypes;
+
+        private :
+          int height;
+          int width;
+          int length;
     };
 
 }

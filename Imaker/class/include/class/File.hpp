@@ -17,9 +17,12 @@ namespace Imaker{
       bool fileExist(std::string File);
       void saveFile(std::string File);
       void changeFileName(std::string);
+      std::string getFileName();
 
     public :
       World world;
+
+    private :
       std::string fileName;
 
   };
