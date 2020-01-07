@@ -61,8 +61,6 @@ namespace Imaker {
 
         //WireframeM mode off
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-
     }
 
 
@@ -73,7 +71,7 @@ namespace Imaker {
         }
         else {
             int z = pos.z;
-            while(z < this->height) {
+            while(z < this->height-1) {
                 if(!allCubes[pos.x][pos.y][z+1].isVisible()) {
                     allCubes[pos.x][pos.y][z+1].fillCube();
                     allCubes[pos.x][pos.y][z+1].editType(allCubes[pos.x][pos.y][pos.z].returnCubeType());

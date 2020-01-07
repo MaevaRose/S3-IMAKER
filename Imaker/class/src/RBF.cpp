@@ -8,78 +8,122 @@ using namespace Eigen;
 namespace Imaker{
     //RADIAL FUNCTIONS _____________________________________________________________
 
-    float rbfLineaire(float dist, float alpha) {
+    float rbfLineaire(float dist, float alpha) {                    // indice 1
         return alpha * dist;
     }
 
-    float rbfMultiquad(float dist, float alpha) {
+    float rbfMultiQuad(float dist, float alpha) {                   // indice 2
         return sqrt(1 + (alpha * dist) * (alpha * dist));
     }
 
-    float rbfInverseQuad(float dist, float alpha) {
+    float rbfInverseQuad(float dist, float alpha) {                 // indice 3
         return 1/(1 + (alpha * dist) * (alpha * dist));
     }
 
-    float rbfInverseMultiquad(float dist, float alpha) {
+    float rbfInverseMultiQuad(float dist, float alpha) {            // indice 4
         return 1/(sqrt(1 + (alpha * dist) * (alpha * dist)));
     }
 
-    float rbfGauss(float dist, float alpha) {
+    float rbfGauss(float dist, float alpha) {                       // indice 5
         return exp(-(alpha * dist) * (alpha * dist));
     }
 
-    float rbfLog(float dist, float alpha) {
-        return dist * dist * log(dist/alpha);
-    }
 
 
     //INTERPOLATION FUNC CLASS_______________________________________________________
 
-    InterpolationFunc::InterpolationFunc(std::vector<glm::vec2> pos, VectorXd u, int indiceRBF) : position(pos), poids(u), rbfAssociate(indiceRBF) {};
+    InterpolationFunc::InterpolationFunc() : rbfAssociate(1), alpha(-1) {};
+    InterpolationFunc::InterpolationFunc(std::vector<glm::vec2> pos, std::vector<double> u, int indiceRBF, float coeff) : position(pos), poids(u), rbfAssociate(indiceRBF), alpha(coeff) {};
 
 
-    void InterpolationFunc::setPoids(VectorXd poids) {
+    void InterpolationFunc::setPoids(std::vector<double> poids) {
         this->poids = poids;
     }
 
     void InterpolationFunc::addContrainte(int x, int y, int z) {
         this->position.push_back(glm::vec2(x, y));
-        this->poids << z;
+        this->poids.push_back(z);
     }
 
-    MatrixXd InterpolationFunc::buildMatContrainte(int dim) {
-        MatrixXd contraintes(dim, dim);
-        for(int i=0; i<dim; i++) {
-            for(int j=0; j<dim; j++) {
-                contraintes(i, j) = rbfLineaire(glm::length(this->position[i] - this->position[j]), -1.f);
-            }
+    float InterpolationFunc::RBF(int i, int j) {
+        float dist = glm::length(this->position[i] - this->position[j]);
+        switch(this->rbfAssociate) {
+            case 1: 
+                return rbfLineaire(dist, this->alpha);
+            break;
+
+            case 2: 
+                return rbfMultiQuad(dist, this->alpha);
+            break;
+
+            case 3: 
+                return rbfInverseQuad(dist, this->alpha);
+            break;
+
+            case 4: 
+                return rbfInverseMultiQuad(dist, this->alpha);
+            break;
+
+            case 5: 
+                return rbfGauss(dist, this->alpha);
+            break;
+
+            default : 
+            break;
+
         }
     }
 
-    void InterpolationFunc::calculW(MatrixXd contraintes) {
-        Eigen::ColPivHouseholderQR<Eigen::MatrixXd> dec(contraintes);
-        this->w = dec.solve(this->poids);
+    MatrixXd InterpolationFunc::buildMatContrainte() {
+        int dim = this->poids.size();
+        MatrixXd contraintes(dim, dim);
+        for(int i=0; i<dim; i++) {
+            for(int j=0; j<dim; j++) {
+                contraintes(i, j) = RBF(i, j);
+            }
+        }
+        return contraintes;
     }
 
-    float InterpolationFunc::calculInterpolation(glm::vec2 x) {
+    void InterpolationFunc::calculW(MatrixXd contraintes) {
+        int nbContraintes = this->poids.size();
+        VectorXd eigenPoids;
+        eigenPoids.resize(nbContraintes);
+        for(int i=0; i<nbContraintes; i++) {
+            eigenPoids(i)=this->poids[i];
+        }
+        ColPivHouseholderQR<Eigen::MatrixXd> dec(contraintes);
+        this->w = dec.solve(eigenPoids);
+    }
+
+
+    float InterpolationFunc::calculInterpolation(glm::vec2 point) {
         float somme = 0;
         for(int i=0; i<this->poids.size(); i++) {
-            somme += this->w[i] * rbfLineaire(glm::length(x - this->position[i]), 1);
+            somme += this->w[i] * rbfLineaire(glm::length(point - this->position[i]), this->alpha);
         }
         return somme;
     }
 
-    void InterpolationFunc::drawFunc(int X, int Y, World world) {
-        //Pseudo code :
+
+    void InterpolationFunc::drawFunc(World &world) {
+        int X = world.getLength();
+        int Y = world.getWidth();
         for(int i =0; i<X; i++) {
             for(int j=0; j<Y; j++) {
-                int z = calculInterpolation(glm::vec2(i,j));
-                for(int k=0; k<z; k++) {
-                    world.extrude(glm::vec3(i, j, k));
+                float z = calculInterpolation(glm::vec2(i,j));
+                if(z>0) {
+                    for(int k=0; k<z && k<23; k++) {
+                        world.extrude(glm::vec3(i, j, k));
+                    }
                 }
+                // else {
+                //     while(world.allCubes[i][j][0].isVisible()){
+                //         world.dig(glm::vec3(i,j,0));
+                //     }
+                // }
             }
         }
     }
 
 }
-//RBF UTILISATION_________________________________________________________________

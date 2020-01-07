@@ -19,23 +19,33 @@ namespace Imaker{
 
         //constructor
         InterpolationFunc();
-        InterpolationFunc(std::vector<glm::vec2> p, VectorXd u, int indiceRBF);
+        InterpolationFunc(std::vector<glm::vec2> p, std::vector<double> u, int indiceRBF, float coeff);
 
         //Methodes
-        void setPoids(VectorXd poids);
+        void setPoids(std::vector<double> poids);
+        float RBF(int i, int j);
         void addContrainte(int x, int y, int z);
-        MatrixXd buildMatContrainte(int dim);
+        MatrixXd buildMatContrainte();
         void calculW(MatrixXd contraintes);
-        float calculInterpolation(glm::vec2 x);
-        void drawFunc(int X, int Y, World world);
+        float calculInterpolation(glm::vec2 point);
+        void drawFunc(World &world);
         
 
         private : 
 
         //attributs
         std::vector<glm::vec2> position;
-        VectorXd poids;
-        int rbfAssociate;
+        std::vector<double> poids;
         VectorXd w;
+        int rbfAssociate;
+        float alpha;
     };
+
+    float rbfLineaire(float dist, float alpha);
+    float rbfMultiQuad(float dist, float alpha);
+    float rbfInverseQuad(float dist, float alpha);
+    float rbfInverseMultiQuad(float dist, float alpha);
+    float rbfGauss(float dist, float alpha);
+
+    
 }

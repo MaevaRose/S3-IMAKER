@@ -7,6 +7,7 @@
 #include <vector>
 #include <class/Cursor.hpp>
 #include <class/Interface.hpp>
+#include <class/RBF.hpp>
 
 
 using namespace glimac;
@@ -84,6 +85,29 @@ int main(int argc, char** argv) {
 
     /* Création de la camera */
     TrackBallCamera camera;
+    //ZONE DE TEST DES FONCTIONS ////////////////////////////////////////////////////////
+
+    InterpolationFunc fonction;
+
+    fonction.addContrainte(12,15, 8);
+    fonction.addContrainte(19, 3, 25);
+    fonction.addContrainte(24, 1, 24);
+    fonction.addContrainte(20, 5, 2);
+
+
+
+    
+    fonction.calculW(fonction.buildMatContrainte());
+
+    fonction.drawFunc(currentFile.world);
+
+    std::cout << "bob" << std::endl;
+
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
+
 
     //pour déplacer le curseur pas trop vite
     int count = 0;
