@@ -83,11 +83,11 @@ namespace Imaker{
     ImGui::Begin("Cube Type");
     ImGuiColorEditFlags colorFlags = ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_DisplayRGB;
     if (ImGui::TreeNode("Tous les types")){
-      for (int n = 0; n < world.allCubeTypes.size(); n++)
+      for (int n = 0; n < world.getAllCubeTypes().size(); n++)
       {
-          const char* charCubeType = world.allCubeTypes[n].name.c_str();
+          const char* charCubeType = world.getAllCubeTypes()[n].name.c_str();
           if (ImGui::Selectable(charCubeType, n)){
-            cube.editType(world.allCubeTypes[n]);
+            cube.editType(world.getAllCubeTypes()[n]);
           }
       }
       ImGui::TreePop();
@@ -380,7 +380,7 @@ namespace Imaker{
     saveAsWindow(currentFile);
     overwriteWindow(currentFile);
     createNewWorldWindow(currentFile, cursor);
-    selectionTypeCube(currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z], currentFile.world);
+    selectionTypeCube(currentFile.world.getAllCubes()[cursorPos.x][cursorPos.y][cursorPos.z], currentFile.world);
   }
 
   //rendu de l'interface

@@ -5,15 +5,15 @@ namespace Imaker {
     //Constructeur
     File::File() : world(World(25,25,25)), fileName("../Imaker/assets/data/NewFile.imaker") {
       world.createScene();
-      world.allCubeTypes.push_back(cubeType(glm::vec3(0,0,1), "Bleu"));
-      world.allCubeTypes.push_back(cubeType(glm::vec3(1,1,1), "Blanc"));
+      world.getAllCubeTypes().push_back(cubeType(glm::vec3(0,0,1), "Bleu"));
+      world.getAllCubeTypes().push_back(cubeType(glm::vec3(1,1,1), "Blanc"));
     };
 
     //Autre constructeur
     File::File(glm::vec3 tailleWorld) : world(World(tailleWorld.x, tailleWorld.y ,tailleWorld.z)), fileName("../Imaker/assets/data/NewFile.imaker") {
       world.createScene();
-      world.allCubeTypes.push_back(cubeType(glm::vec3(0,0,1), "Bleu"));
-      world.allCubeTypes.push_back(cubeType(glm::vec3(1,1,1), "Blanc"));
+      world.getAllCubeTypes().push_back(cubeType(glm::vec3(0,0,1), "Bleu"));
+      world.getAllCubeTypes().push_back(cubeType(glm::vec3(1,1,1), "Blanc"));
     }
 
     //Ouvrir un fichier .imaker
@@ -108,7 +108,7 @@ namespace Imaker {
           if(r != -1 && g != -1 && b != -1){
             char charTypeName[32];
     	      std::copy(typeName.begin(), typeName.end(), charTypeName);;
-            world.allCubeTypes.push_back(cubeType(glm::vec3((float)r/255,(float)g/255,(float)b/255), charTypeName));
+            world.getAllCubeTypes().push_back(cubeType(glm::vec3((float)r/255,(float)g/255,(float)b/255), charTypeName));
           }
         }
       }
@@ -147,9 +147,9 @@ namespace Imaker {
           //type
           file.seekg(1, std::ios::cur);
           file>>nombre;
-          cubeType cubetype = world.allCubeTypes[nombre];
+          cubeType cubetype = world.getAllCubeTypes()[nombre];
           //on peut créer le cube
-          world.allCubes[y][z][x] = Cube(glm::vec3(y,z,x), visible, cubetype);
+          world.getAllCubes()[y][z][x] = Cube(glm::vec3(y,z,x), visible, cubetype);
         }//fin de la boucle for pour chaque cube
       }
       ////////////////////////////////////////////////////////////////////////////////////
@@ -184,9 +184,9 @@ namespace Imaker {
         file << "World " << world.getHeight() << " " << world.getWidth() << " " << world.getLength() << " " << std::endl;
 
         //cubeType
-        file << world.allCubeTypes.size() << std::endl;
-        for(int i = 0 ; i < world.allCubeTypes.size() ; i++){
-          file << "Type " << i << " " << int(world.allCubeTypes[i].color.x*255) << " " << int(world.allCubeTypes[i].color.y*255) << " " << int(world.allCubeTypes[i].color.z*255) << " " <<  world.allCubeTypes[i].name << " " << std::endl; //finir
+        file << world.getAllCubeTypes().size() << std::endl;
+        for(int i = 0 ; i < world.getAllCubeTypes().size() ; i++){
+          file << "Type " << i << " " << int(world.getAllCubeTypes()[i].color.x*255) << " " << int(world.getAllCubeTypes()[i].color.y*255) << " " << int(world.getAllCubeTypes()[i].color.z*255) << " " <<  world.getAllCubeTypes()[i].name << " " << std::endl; //finir
         }
 
         //allCubes
@@ -198,17 +198,17 @@ namespace Imaker {
                 for(int k = 0 ; k < world.getHeight() ; k++){
                   //on vérifie les valeurs de visible et de type qui sont stockées différemment
                   std::string stringVisible;
-                  if(world.allCubes[i][j][k].isVisible()) stringVisible = "true";
+                  if(world.getAllCubes()[i][j][k].isVisible()) stringVisible = "true";
                   else stringVisible = "false";
 
                   int intCubeType;
-                  for (int l = 0 ; l < world.allCubeTypes.size() ; l++) {
-                    if(world.allCubes[i][j][k].returnCubeType() == world.allCubeTypes[l]) intCubeType = l;
+                  for (int l = 0 ; l < world.getAllCubeTypes().size() ; l++) {
+                    if(world.getAllCubes()[i][j][k].returnCubeType() == world.getAllCubeTypes()[l]) intCubeType = l;
                     else intCubeType = 0;
                   }
 
                   //on met le tout dans le fichier
-                  glm::vec3 cubePosition = world.allCubes[i][j][k].getPos();
+                  glm::vec3 cubePosition = world.getAllCubes()[i][j][k].getPos();
                   file << "Cube " << cubePosition.z << " " << cubePosition.y << " " << cubePosition.x << " " << stringVisible << " " << intCubeType << " " << std::endl;
                 }
             }

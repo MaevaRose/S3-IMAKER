@@ -8,23 +8,23 @@ using namespace Eigen;
 namespace Imaker{
     //RADIAL FUNCTIONS _____________________________________________________________
 
-    float rbfLineaire(float dist, float alpha) {                    // indice 1
+    float rbfLineaire(const float dist, const float alpha) {                    // indice 1
         return alpha * dist;
     }
 
-    float rbfMultiQuad(float dist, float alpha) {                   // indice 2
+    float rbfMultiQuad(const float dist, const float alpha) {                   // indice 2
         return sqrt(1 + (alpha * dist) * (alpha * dist));
     }
 
-    float rbfInverseQuad(float dist, float alpha) {                 // indice 3
+    float rbfInverseQuad(const float dist, const float alpha) {                 // indice 3
         return 1/(1 + (alpha * dist) * (alpha * dist));
     }
 
-    float rbfInverseMultiQuad(float dist, float alpha) {            // indice 4
+    float rbfInverseMultiQuad(const float dist, const float alpha) {            // indice 4
         return 1/(sqrt(1 + (alpha * dist) * (alpha * dist)));
     }
 
-    float rbfGauss(float dist, float alpha) {                       // indice 5
+    float rbfGauss(const float dist, const float alpha) {                       // indice 5
         return exp(-(alpha * dist) * (alpha * dist));
     }
 
@@ -36,7 +36,7 @@ namespace Imaker{
     InterpolationFunc::InterpolationFunc(std::vector<glm::vec2> pos, std::vector<double> u, int indiceRBF, float coeff) : position(pos), poids(u), rbfAssociate(indiceRBF), alpha(coeff) {};
 
 
-    void InterpolationFunc::setPoids(std::vector<double> poids) {
+    void InterpolationFunc::setPoids(const std::vector<double> &poids) {
         this->poids = poids;
     }
 
@@ -57,42 +57,13 @@ namespace Imaker{
       return this->poids;
     }
 
-    void InterpolationFunc::addContrainte(int x, int y, int z) {
+    void InterpolationFunc::addContrainte(const int &x, const int &y, const int &z) {
         this->position.push_back(glm::vec2(x, y));
         this->poids.push_back(z);
     }
 
-    // template<typename T>
-    // float InterpolationFunc::RBF(const T &i, const T &j) {
-    //     float dist = glm::length(this->position[i] - this->position[j]);
-    //     switch(this->rbfAssociate) {
-    //         case 1:
-    //             return rbfLineaire(dist, this->alpha);
-    //         break;
 
-    //         case 2:
-    //             return rbfMultiQuad(dist, this->alpha);
-    //         break;
-
-    //         case 3:
-    //             return rbfInverseQuad(dist, this->alpha);
-    //         break;
-
-    //         case 4:
-    //             return rbfInverseMultiQuad(dist, this->alpha);
-    //         break;
-
-    //         case 5:
-    //             return rbfGauss(dist, this->alpha);
-    //         break;
-
-    //         default :
-    //         break;
-
-    //     }
-    // }
-
-    MatrixXd InterpolationFunc::buildMatContrainte() {
+    MatrixXd InterpolationFunc::buildMatContrainte() const {
         int dim = this->poids.size();
         MatrixXd contraintes(dim, dim);
         for(int i=0; i<dim; i++) {
@@ -103,7 +74,7 @@ namespace Imaker{
         return contraintes;
     }
 
-    void InterpolationFunc::calculW(MatrixXd contraintes) {
+    void InterpolationFunc::calculW(const MatrixXd &contraintes) {
         int nbContraintes = this->poids.size();
         VectorXd eigenPoids;
         eigenPoids.resize(nbContraintes);
@@ -115,10 +86,9 @@ namespace Imaker{
     }
 
 
-    float InterpolationFunc::calculInterpolation(glm::vec2 point) {
+    float InterpolationFunc::calculInterpolation(const glm::vec2 &point) const {
         float somme = 0;
         for(int i=0; i<this->poids.size(); i++) {
-            //float rbf = RBF()
             somme += this->w[i] * RBF(point, this->position[i]);
         }
         return somme;
@@ -136,11 +106,6 @@ namespace Imaker{
                         world.extrude(glm::vec3(i, j, k));
                     }
                 }
-                // else {
-                //     while(world.allCubes[i][j][0].isVisible()){
-                //         world.dig(glm::vec3(i,j,0));
-                //     }
-                // }
             }
         }
     }

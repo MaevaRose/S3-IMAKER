@@ -16,10 +16,10 @@ using namespace Imaker;
 
 void destroyWorld(World &world, Cursor &cursor){
   cursor.destroy();
-  for(int i = 0 ; i < world.getWidth() ; i++ ){
+  for(int i = 0; i < world.getWidth(); i++ ){
       for(int j = 0 ; j < world.getLength() ; j++){
           for(int k = 0 ; k < world.getHeight() ; k++){
-              world.allCubes[i][j][k].destroy();
+              world.getAllCubes()[i][j][k].destroy();
           }
       }
   }
@@ -212,11 +212,11 @@ int main(int argc, char** argv) {
             { count = 99;
               cursorPos = cursor.getCursorPos();
               if(e.key.keysym.sym == SDLK_c){
-               currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].fillCube();
+               currentFile.world.getAllCubes()[cursorPos.x][cursorPos.y][cursorPos.z].fillCube();
                e.type = 0;
               }
               else if(e.key.keysym.sym == SDLK_v){
-                currentFile.world.allCubes[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
+                currentFile.world.getAllCubes()[cursorPos.x][cursorPos.y][cursorPos.z].deleteCube();
                 e.type = 0;
               }
               else if(e.key.keysym.sym == SDLK_e){

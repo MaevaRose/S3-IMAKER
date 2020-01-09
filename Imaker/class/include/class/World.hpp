@@ -10,31 +10,32 @@ namespace Imaker{
 
         //constructor
         World();
-        World(int height, int width, int len);
+        World(const int height, const int width, const int len);
 
 
         //methodes
-        int getHeight();
-        int getWidth();
-        int getLength();
+        inline int getHeight() const {return height; }
+        inline int getWidth() const {return width; };
+        inline int getLength() const {return length; };
+        inline std::vector<std::vector<std::vector<Cube>>> getAllCubes() const {return allCubes; }
+        inline std::vector<cubeType> getAllCubeTypes() const {return allCubeTypes; }
 
         void createScene();
-        void drawScene(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc);
-        void drawWorld(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc);
-        void createNewCubeType(glm::vec3 color, char cubeName[32]);
-        void extrude(glm::vec3 pos);
-        void dig(glm::vec3 pos);
+        void drawScene(const glm::mat4 &globalMVMatrix, const GLint &uMVPMatrixLoc, const GLint &uMVMatrixLoc, const GLint &uNormalMatrixLoc, const GLint &cubeColorLoc);
+        void drawWorld(const glm::mat4 &globalMVMatrix, const GLint &uMVPMatrixLoc, const GLint &uMVMatrixLoc, const GLint &uNormalMatrixLoc, const GLint &cubeColorLoc);
+        void createNewCubeType(const glm::vec3 &color, char cubeName[32]);
+        void extrude(const glm::vec3 &pos);
+        void dig(const glm::vec3 &pos);
         void reset();
 
         //attributs
-        public :
-        std::vector<std::vector<std::vector<Cube>>> allCubes;
-        std::vector<cubeType> allCubeTypes;
-
         private :
-          int height;
-          int width;
-          int length;
+            int height;
+            int width;
+            int length;
+
+            std::vector<std::vector<std::vector<Cube>>> allCubes;
+            std::vector<cubeType> allCubeTypes;
     };
 
 }
