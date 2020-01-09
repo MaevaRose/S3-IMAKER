@@ -11,6 +11,7 @@ namespace Imaker{
         //constructor
         World();
         World(const int height, const int width, const int len);
+        ~World();
 
 
         //methodes

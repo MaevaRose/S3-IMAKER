@@ -82,29 +82,10 @@ int main(int argc, char** argv) {
 
     Cursor cursor; // déclaration du cursor
     glm::vec3 cursorPos;
+    InterpolationFunc fonction;
 
     /* Création de la camera */
     TrackBallCamera camera;
-    //ZONE DE TEST DES FONCTIONS ////////////////////////////////////////////////////////
-
-    InterpolationFunc fonction;
-
-    fonction.addContrainte(12,15, 8);
-
-
-
-
-    fonction.calculW(fonction.buildMatContrainte());
-
-    fonction.drawFunc(currentFile.world);
-
-    std::cout << "bob" << std::endl;
-
-
-
-
-    /////////////////////////////////////////////////////////////////////////////////////
-
 
     //pour déplacer le curseur pas trop vite
     int count = 0;
@@ -152,11 +133,9 @@ int main(int argc, char** argv) {
              {
                float zoom = 0.1f;
                if (e.key.keysym.sym == SDLK_UP) {
-                 //std::cout << "Z or UP pressed" << std::endl;
                  camera.moveFront(-zoom);
                }
                else if (e.key.keysym.sym == SDLK_DOWN) {
-                 //std::cout << "S or DOWN pressed" << std::endl;
                  camera.moveFront(zoom);
                }
 

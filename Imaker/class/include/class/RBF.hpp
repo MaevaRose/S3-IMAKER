@@ -20,6 +20,7 @@ namespace Imaker{
         //constructor
         InterpolationFunc();
         InterpolationFunc(std::vector<glm::vec2> p, std::vector<double> u, int indiceRBF, float coeff);
+        ~InterpolationFunc();
 
         //Methodes
         void setPoids(const std::vector<double> &poids);

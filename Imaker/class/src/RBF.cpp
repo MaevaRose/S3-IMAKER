@@ -34,7 +34,7 @@ namespace Imaker{
 
     InterpolationFunc::InterpolationFunc() : rbfAssociate(5), alpha(-1) {};
     InterpolationFunc::InterpolationFunc(std::vector<glm::vec2> pos, std::vector<double> u, int indiceRBF, float coeff) : position(pos), poids(u), rbfAssociate(indiceRBF), alpha(coeff) {};
-
+    InterpolationFunc::~InterpolationFunc() {}
 
     void InterpolationFunc::setPoids(const std::vector<double> &poids) {
         this->poids = poids;

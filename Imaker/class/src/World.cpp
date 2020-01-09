@@ -7,7 +7,7 @@ namespace Imaker {
 
     World::World() : height(100), width(100), length(100), allCubes(100,std::vector<std::vector<Cube>>(100,std::vector <Cube>(100) ) ) {};
     World::World(const int hei, const int wid, const int len) : height(hei), width(wid), length(len), allCubes(wid,std::vector<std::vector<Cube>>(len,std::vector <Cube>(hei) ) ) {};
-
+    World::~World() {}
 
     void World::reset(){
       for(int i = 0 ; i < this->width ; i++ ){

@@ -38,15 +38,17 @@ namespace Imaker{
       Cube(glm::vec3 vecPosition, bool visibility, cubeType cubetype);
       ~Cube();
 
-      void drawCubeScaled(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc, int width, int length, int height);
-      void drawCube(glm::mat4 globalMVMatrix, GLint uMVPMatrixLoc, GLint uMVMatrixLoc, GLint uNormalMatrixLoc, GLint cubeColorLoc); // afficher un cube avec TrackBallCamera
-      bool isVisible();
+      inline bool isVisible() const {return visible; }
+      inline void editType(const cubeType &newType) {type = newType; }
+      inline glm::vec3 getPos() const {return position; };
+      inline cubeType returnCubeType() const {return type; };
+
+
+      void destroy();
+      void drawCube(const glm::mat4 &globalMVMatrix, const GLint &uMVPMatrixLoc, const GLint &uMVMatrixLoc, const GLint &uNormalMatrixLoc, const GLint &cubeColorLoc); // afficher un cube avec TrackBallCamera
+      void drawCubeScaled(const glm::mat4 &globalMVMatrix, const GLint &uMVPMatrixLoc, const GLint &uMVMatrixLoc, const GLint &uNormalMatrixLoc, const GLint &cubeColorLoc, const int width, const int length, const int height);
       void fillCube();
       void deleteCube();
-      void editType(cubeType newType);
-      void destroy();
-      glm::vec3 getPos();
-      cubeType returnCubeType();
 
 
     protected :
