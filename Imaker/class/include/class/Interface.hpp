@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <SDL.h>
 #include "class/Cursor.hpp"
+#include "class/RBF.hpp"
 #include "class/File.hpp"
 
 #include <GL/glew.h>
@@ -31,7 +32,8 @@ namespace Imaker{
       void saveWindow();
       void saveAsWindow(File &file);
       void overwriteWindow(File &file);
-      void draw(TrackBallCamera &camera, File &currentFile, Cursor &cursor, int &luminosity);
+      void rbfWindow(File &file, InterpolationFunc &fonction);
+      void draw(TrackBallCamera &camera, File &currentFile, Cursor &cursor, int &luminosity, InterpolationFunc &fonction);
 
     public:
       glimac::SDLWindowManager windowManager;

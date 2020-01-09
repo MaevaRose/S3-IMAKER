@@ -361,7 +361,7 @@ namespace Imaker{
     if(!visible){
       visible = true;
     }
-    else std::cout << "Un cube existe déjà à cet emplacement" << std::endl;
+    //else std::cout << "Un cube existe déjà à cet emplacement" << std::endl;
   }
 
 
@@ -370,7 +370,7 @@ namespace Imaker{
       visible = false;
       //glDrawElements(GL_TRIANGLES, 0, GL_UNSIGNED_SHORT, (void*) 0);
     }
-    else std::cout << "Aucun cube à supprimer" << std::endl;
+    //else std::cout << "Aucun cube à supprimer" << std::endl;
   }
 
 

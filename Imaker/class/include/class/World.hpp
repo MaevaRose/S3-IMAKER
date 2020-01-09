@@ -24,6 +24,7 @@ namespace Imaker{
         void createNewCubeType(glm::vec3 color, char cubeName[32]);
         void extrude(glm::vec3 pos);
         void dig(glm::vec3 pos);
+        void reset();
 
         //attributs
         public :

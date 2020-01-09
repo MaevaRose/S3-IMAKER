@@ -21,6 +21,19 @@ namespace Imaker {
         return this -> length;
     }
 
+    void World::reset(){
+      for(int i = 0 ; i < this->width ; i++ ){
+          for(int j = 0 ; j < this->length ; j++){
+            for(int k=0; k<3; k++) {
+                this->allCubes[i][j][k].fillCube();
+            }
+            for(int k = 3 ; k < this->height ; k++){
+                this->allCubes[i][j][k].deleteCube();
+            }
+          }
+      }
+    }
+
     //construction de tous les cubes à partir de la taille donné au world
     void World::createScene(){
         type = cubeType(glm::vec3(1,1,1), "Blanc");

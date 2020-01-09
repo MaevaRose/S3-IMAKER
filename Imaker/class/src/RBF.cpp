@@ -32,12 +32,29 @@ namespace Imaker{
 
     //INTERPOLATION FUNC CLASS_______________________________________________________
 
-    InterpolationFunc::InterpolationFunc() : rbfAssociate(2), alpha(-1) {};
+    InterpolationFunc::InterpolationFunc() : rbfAssociate(5), alpha(-1) {};
     InterpolationFunc::InterpolationFunc(std::vector<glm::vec2> pos, std::vector<double> u, int indiceRBF, float coeff) : position(pos), poids(u), rbfAssociate(indiceRBF), alpha(coeff) {};
 
 
     void InterpolationFunc::setPoids(std::vector<double> poids) {
         this->poids = poids;
+    }
+
+    void InterpolationFunc::deleteContraintes(const int indice) {
+        this->position.erase(position.begin()+indice);
+        this->poids.erase(poids.begin()+indice);
+    }
+
+    void InterpolationFunc::setIndice(const int indiceRBF) {
+      this->rbfAssociate = indiceRBF;
+    }
+
+    void InterpolationFunc::setAlpha(const float coeff) {
+      this->alpha = coeff;
+    }
+
+    std::vector<double> InterpolationFunc::returnContraintes() const {
+      return this->poids;
     }
 
     void InterpolationFunc::addContrainte(int x, int y, int z) {
@@ -49,27 +66,27 @@ namespace Imaker{
     // float InterpolationFunc::RBF(const T &i, const T &j) {
     //     float dist = glm::length(this->position[i] - this->position[j]);
     //     switch(this->rbfAssociate) {
-    //         case 1: 
+    //         case 1:
     //             return rbfLineaire(dist, this->alpha);
     //         break;
 
-    //         case 2: 
+    //         case 2:
     //             return rbfMultiQuad(dist, this->alpha);
     //         break;
 
-    //         case 3: 
+    //         case 3:
     //             return rbfInverseQuad(dist, this->alpha);
     //         break;
 
-    //         case 4: 
+    //         case 4:
     //             return rbfInverseMultiQuad(dist, this->alpha);
     //         break;
 
-    //         case 5: 
+    //         case 5:
     //             return rbfGauss(dist, this->alpha);
     //         break;
 
-    //         default : 
+    //         default :
     //         break;
 
     //     }

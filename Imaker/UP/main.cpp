@@ -90,13 +90,10 @@ int main(int argc, char** argv) {
     InterpolationFunc fonction;
 
     fonction.addContrainte(12,15, 8);
-    fonction.addContrainte(19, 3, 25);
-    fonction.addContrainte(24, 1, 24);
-    fonction.addContrainte(20, 5, 2);
 
 
 
-    
+
     fonction.calculW(fonction.buildMatContrainte());
 
     fonction.drawFunc(currentFile.world);
@@ -132,7 +129,7 @@ int main(int argc, char** argv) {
 
         //on affiche l'interface
         cursorPos = cursor.getCursorPos();
-        interface.draw(camera, currentFile, cursor, luminosity);
+        interface.draw(camera, currentFile, cursor, luminosity, fonction);
 
         //Pas de sdl event si on est sur une fenêtre ImGui
         interface.io = ImGui::GetIO();

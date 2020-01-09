@@ -23,6 +23,10 @@ namespace Imaker{
 
         //Methodes
         void setPoids(std::vector<double> poids);
+        void setIndice(const int indiceRBF);
+        void setAlpha(const float coeff);
+        std::vector<double> returnContraintes() const;
+        void deleteContraintes(const int indice);
 
         template<typename T>
         float RBF(const T &i, const T &j);
@@ -32,9 +36,9 @@ namespace Imaker{
         void calculW(MatrixXd contraintes);
         float calculInterpolation(glm::vec2 point);
         void drawFunc(World &world);
-        
 
-        private : 
+
+        private :
 
         //attributs
         std::vector<glm::vec2> position;
@@ -42,6 +46,7 @@ namespace Imaker{
         VectorXd w;
         int rbfAssociate;
         float alpha;
+
     };
 
     float rbfLineaire(float dist, float alpha);
@@ -56,30 +61,30 @@ namespace Imaker{
     float InterpolationFunc::RBF(const T &u, const T &v) {
         float dist = glm::length(u - v);
         switch(this->rbfAssociate) {
-            case 1: 
+            case 1:
                 return rbfLineaire(dist, this->alpha);
             break;
 
-            case 2: 
+            case 2:
                 return rbfMultiQuad(dist, this->alpha);
             break;
 
-            case 3: 
+            case 3:
                 return rbfInverseQuad(dist, this->alpha);
             break;
 
-            case 4: 
+            case 4:
                 return rbfInverseMultiQuad(dist, this->alpha);
             break;
 
-            case 5: 
+            case 5:
                 return rbfGauss(dist, this->alpha);
             break;
 
-            default : 
+            default :
             break;
 
         }
     }
-    
+
 }

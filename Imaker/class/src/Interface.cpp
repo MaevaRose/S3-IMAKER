@@ -74,8 +74,6 @@ namespace Imaker{
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(windowManager.window);
     ImGui::NewFrame();
-
-    ImGui::ShowDemoWindow();
   }
 
 
@@ -314,11 +312,67 @@ namespace Imaker{
     }
   }
 
+  void Interface::rbfWindow(File &file, InterpolationFunc &fonction){
+    static float  coeff = 0.123f;
+    static bool inputs_step = true;
+    const float   f32_zero = 0.f, f32_one = 1.f;
+    static int selected = -1;
+    ImGui::Begin("Génération de terrain");
+    if (ImGui::TreeNode("Fonctions procédurales :"))
+    {
+        if (ImGui::Selectable("Linéaire", selected==1 )) selected = 1;
+        if (ImGui::Selectable("MultiQuad", selected == 2)) selected = 2;
+        if (ImGui::Selectable("InverseQuad", selected == 3)) selected = 3;
+        if (ImGui::Selectable("InverseMultiQuad", selected == 4)) selected = 4;
+        if (ImGui::Selectable("Gauss", selected == 5)) selected = 5;
+        ImGui::Text("Coefficient :"); ImGui::SameLine(); ImGui::InputScalar("input float",   ImGuiDataType_Float,  &coeff, inputs_step ? &f32_one : NULL);
+        if(fonction.returnContraintes().size() > 0)
+        {
+          if (ImGui::Button("Générer")) {
+            file.world.reset();
+            fonction.setAlpha(coeff);
+            fonction.setIndice(selected);
+            fonction.calculW(fonction.buildMatContrainte());
+            fonction.drawFunc(file.world);
+          }
+        }
+        ImGui::TreePop();
+    }
+    if (ImGui::TreeNode("Modifier les contraintes"))
+    {
+        ImGui::Text("Toutes les contraintes :");
+        static int selectContr = -1;
+        for (int n = 0; n < fonction.returnContraintes().size(); n++)
+        {
+            char buf[32];
+            sprintf(buf, "Contrainte %d : ", n);
+            if (ImGui::Selectable(buf, selectContr == n))
+                selectContr = n;
+        }
+        if (ImGui::Button("Supprimer")) {
+          fonction.deleteContraintes(selectContr);
+        }
+        static int poids[3] = { 1, 1, 1 };
+        ImGui::SliderInt3(" ", poids, 0, 25);
+        if (ImGui::Button("Ajouter")) {
+          file.world.reset();
+          fonction.addContrainte(poids[0], poids[1], poids[2]);
+          fonction.setAlpha(coeff);
+          fonction.setIndice(selected);
+          fonction.calculW(fonction.buildMatContrainte());
+          fonction.drawFunc(file.world);
+        }
+        ImGui::TreePop();
+    }
+    ImGui::End();
+  }
+
   //dessin de l'Interface
-  void Interface::draw(TrackBallCamera &camera, File &currentFile, Cursor &cursor, int &luminosity){
+  void Interface::draw(TrackBallCamera &camera, File &currentFile, Cursor &cursor, int &luminosity, InterpolationFunc &fonction){
     glm::vec3 cursorPos = cursor.getCursorPos();
     startFrame();
     //toutes les fenêtres
+    rbfWindow(currentFile, fonction);
     posCamera(camera, luminosity);
     MainMenuBar(currentFile);
     browserFile(currentFile);
