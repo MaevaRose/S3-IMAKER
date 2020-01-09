@@ -317,6 +317,8 @@ namespace Imaker{
     static bool inputs_step = true;
     const float   f32_zero = 0.f, f32_one = 1.f;
     static int selected = -1;
+    static int poids[3] = { 1, 1, 1 };
+    static int x = 0, y = 0, z = 0;
     ImGui::Begin("Génération de terrain");
     if (ImGui::TreeNode("Fonctions procédurales :"))
     {
@@ -349,14 +351,20 @@ namespace Imaker{
             if (ImGui::Selectable(buf, selectContr == n))
                 selectContr = n;
         }
-        if (ImGui::Button("Supprimer")) {
-          fonction.deleteContraintes(selectContr);
+        if(fonction.returnContraintes().size() > 0){
+          if (ImGui::Button("Supprimer")) {
+            fonction.deleteContraintes(selectContr);
+          }
         }
-        static int poids[3] = { 1, 1, 1 };
-        ImGui::SliderInt3(" ", poids, 0, 25);
+
+
+        //ImGui::SliderInt3(" ", poids, 0, file.world.getWidth(), file.world.getLength(), file.world.getHeight());
+        ImGui::SliderInt("x", &x, 0, file.world.getLength()); ImGui::Text(" ");
+        ImGui::SameLine(30); ImGui::SliderInt("y", &y, 0, file.world.getHeight());ImGui::Text(" ");
+        ImGui::SameLine(30);ImGui::SliderInt("z", &z, 0, file.world.getWidth());
         if (ImGui::Button("Ajouter")) {
           file.world.reset();
-          fonction.addContrainte(poids[0], poids[1], poids[2]);
+          fonction.addContrainte(x, y, z);
           fonction.setAlpha(coeff);
           fonction.setIndice(selected);
           fonction.calculW(fonction.buildMatContrainte());

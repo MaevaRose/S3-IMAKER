@@ -41,8 +41,10 @@ namespace Imaker{
     }
 
     void InterpolationFunc::deleteContraintes(const int indice) {
+      if ( this->position.size() > 0 && this->poids.size() > 0){
         this->position.erase(position.begin()+indice);
         this->poids.erase(poids.begin()+indice);
+      }
     }
 
     void InterpolationFunc::setIndice(const int indiceRBF) {
@@ -102,7 +104,7 @@ namespace Imaker{
             for(int j=0; j<Y; j++) {
                 float z = calculInterpolation(glm::vec2(i,j));
                 if(z>0) {
-                    for(int k=0; k<z && k<23; k++) {
+                    for(int k=0; k<z && k<world.getHeight()-2; k++) {
                         world.extrude(glm::vec3(i, j, k));
                     }
                 }

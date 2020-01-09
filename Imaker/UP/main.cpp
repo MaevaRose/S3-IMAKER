@@ -105,7 +105,6 @@ int main(int argc, char** argv) {
             if(e.type == SDL_QUIT) {
                 done = true; //fin du programme
             }
-
         }
 
         //on affiche l'interface
@@ -284,7 +283,6 @@ int main(int argc, char** argv) {
         interface.windowManager.swapBuffers();
     }
 
-    destroyWorld(currentFile.world, cursor);
 
     return EXIT_SUCCESS;
 }
