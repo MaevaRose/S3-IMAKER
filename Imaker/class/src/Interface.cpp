@@ -79,26 +79,37 @@ namespace Imaker{
 
 
   //Fenêtre pour les types de Cubes
-  void Interface::selectionTypeCube(Cube &cube, World &world){
+  void Interface::selectionTypeCube(Cursor &cursor, World &world){
     ImGui::Begin("Cube Type");
+    glm::vec3 cursorPos = cursor.getCursorPos();
+    static cubeType cubetype;
+    static int selected = -1;
     ImGuiColorEditFlags colorFlags = ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_DisplayRGB;
     if (ImGui::TreeNode("Tous les types")){
       for (int n = 0; n < world.getAllCubeTypes().size(); n++)
       {
-          const char* charCubeType = world.getAllCubeTypes()[n].name.c_str();
+          const char* charCubeType = world.getCubeType(n).name.c_str();
           if (ImGui::Selectable(charCubeType, n)){
-            cube.editType(world.getAllCubeTypes()[n]);
+            std::cout<<"ah";
+            cubetype = world.getCubeType(n);
+
+            world.editCube(cursorPos.x, cursorPos.y, cursorPos.z, cubetype);
           }
       }
       ImGui::TreePop();
     }
     if(ImGui::TreeNode("Ajouter un nouveau type")){
-      static char nomTypeCube[32] = "";
+      static char nomTypeCube[32];
       static ImGuiInputTextFlags textFlags = ImGuiInputTextFlags_AllowTabInput | ImGuiInputTextFlags_CharsNoBlank;
       ImGui::InputText("  ", nomTypeCube, 64, textFlags);
       ImGui::ColorPicker4("MyColor##4", (float*)&currentColor, colorFlags, NULL);
-      if (ImGui::Button("Add")) {
-        world.createNewCubeType(glm::vec3(currentColor.x, currentColor.y, currentColor.z), nomTypeCube);
+      if(nomTypeCube[0]=='\0'){
+        ImGui::Text("Donnez un nom au type !");
+      }
+      else{
+        if (ImGui::Button("Add")) {
+          world.createNewCubeType(glm::vec3(currentColor.x, currentColor.y, currentColor.z), nomTypeCube);
+        }
       }
       ImGui::TreePop();
     }
@@ -381,6 +392,7 @@ namespace Imaker{
     startFrame();
     //toutes les fenêtres
     rbfWindow(currentFile, fonction);
+    selectionTypeCube(cursor, currentFile.world);
     posCamera(camera, luminosity);
     MainMenuBar(currentFile);
     browserFile(currentFile);
@@ -388,7 +400,7 @@ namespace Imaker{
     saveAsWindow(currentFile);
     overwriteWindow(currentFile);
     createNewWorldWindow(currentFile, cursor);
-    selectionTypeCube(currentFile.world.getAllCubes()[cursorPos.x][cursorPos.y][cursorPos.z], currentFile.world);
+
   }
 
   //rendu de l'interface

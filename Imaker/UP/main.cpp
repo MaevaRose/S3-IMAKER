@@ -13,19 +13,6 @@
 using namespace glimac;
 using namespace Imaker;
 
-
-void destroyWorld(World &world, Cursor &cursor){
-  cursor.destroy();
-  for(int i = 0; i < world.getWidth(); i++ ){
-      for(int j = 0 ; j < world.getLength() ; j++){
-          for(int k = 0 ; k < world.getHeight() ; k++){
-              world.getAllCubes()[i][j][k].destroy();
-          }
-      }
-  }
-  world.destroy();
-}
-
 int main(int argc, char** argv) {
 
     Interface interface;

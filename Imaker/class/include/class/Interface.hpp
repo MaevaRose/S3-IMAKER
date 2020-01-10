@@ -24,7 +24,7 @@ namespace Imaker{
       void startFrame();
       void render();
       void swapBuffers();
-      void selectionTypeCube(Cube &cube, World &world);
+      void selectionTypeCube(Cursor &cursor, World &world);
       void posCamera(TrackBallCamera &camera, int &luminosity);
       void MainMenuBar(File &file);
       void browserFile(File &file);

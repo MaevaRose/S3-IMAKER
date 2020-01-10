@@ -107,8 +107,8 @@ namespace Imaker {
           //on vérifie et on push
           if(r != -1 && g != -1 && b != -1){
             char charTypeName[32];
-    	      std::copy(typeName.begin(), typeName.end(), charTypeName);;
-            world.getAllCubeTypes().push_back(cubeType(glm::vec3((float)r/255,(float)g/255,(float)b/255), charTypeName));
+    	      std::copy(typeName.begin(), typeName.end(), charTypeName);
+            world.addCubeType(cubeType(glm::vec3((float)r/255,(float)g/255,(float)b/255), charTypeName));
           }
         }
       }
@@ -147,9 +147,10 @@ namespace Imaker {
           //type
           file.seekg(1, std::ios::cur);
           file>>nombre;
-          cubeType cubetype = world.getAllCubeTypes()[nombre];
+          cubeType cubetype = world.getCubeType(nombre);
           //on peut créer le cube
-          world.getAllCubes()[y][z][x] = Cube(glm::vec3(y,z,x), visible, cubetype);
+          //world.getAllCubes()[y][z][x] = Cube(glm::vec3(y,z,x), visible, cubetype);
+          world.setCube(y, z, x, Cube(glm::vec3(y,z,x), visible, cubetype));
         }//fin de la boucle for pour chaque cube
       }
       ////////////////////////////////////////////////////////////////////////////////////
