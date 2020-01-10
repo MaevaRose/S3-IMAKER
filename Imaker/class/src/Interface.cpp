@@ -90,7 +90,6 @@ namespace Imaker{
       {
           const char* charCubeType = world.getCubeType(n).name.c_str();
           if (ImGui::Selectable(charCubeType, n)){
-            std::cout<<"ah";
             cubetype = world.getCubeType(n);
 
             world.editCube(cursorPos.x, cursorPos.y, cursorPos.z, cubetype);
